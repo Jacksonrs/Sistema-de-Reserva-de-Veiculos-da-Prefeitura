@@ -30,7 +30,7 @@ export default function Sidebar() {
         <div className="logo-icon">
           <i className="ti ti-steering-wheel" style={{ color: '#fff', fontSize: 16 }} aria-hidden="true" />
         </div>
-        <div className="logo-text">Drive<span>Control</span></div>
+        <div className="logo-text">FLEET</div>
       </div>
 
       {isAdmin && (

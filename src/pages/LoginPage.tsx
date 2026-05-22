@@ -24,7 +24,7 @@ export default function LoginPage() {
           <div className="logo-icon">
             <i className="ti ti-steering-wheel" style={{ color: '#fff', fontSize: 20 }} aria-hidden="true" />
           </div>
-          <div className="logo-text">Drive<span>Control</span></div>
+          <div className="logo-text">FLEET</div>
         </div>
 
         <div className="login-title">Bem-vindo de volta</div>
