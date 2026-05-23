@@ -9,6 +9,7 @@ export interface User {
   role: UserRole
   sector: string
   email: string
+  avatarUrl?: string
   active: boolean
 }
 

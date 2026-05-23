@@ -1,5 +1,7 @@
 import { useApp } from '@/context/AppContext'
 import Badge from '@/components/Badge'
+import Skeleton from '@/components/Skeleton'
+import { useState, useEffect } from 'react'
 import {
   vehicleStatusBadge, reservationStatusBadge, reservationStatusLabel,
   formatDateShort,
@@ -7,10 +9,16 @@ import {
 
 export default function DashboardPage() {
   const { vehicles, reservations, navigate } = useApp()
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1000)
+    return () => clearTimeout(t)
+  }, [])
 
   const disponivel = vehicles.filter(v => v.status === 'disponivel').length
-  const emUso      = vehicles.filter(v => v.status === 'em-uso').length
-  const proximos   = reservations.filter(r => r.status === 'reservado')
+  const emUso = vehicles.filter(v => v.status === 'em-uso').length
+  const proximos = reservations.filter(r => r.status === 'reservado')
   const inUseVehicles = vehicles.filter(v => v.status === 'em-uso')
 
   const lastTrip = reservations
@@ -20,41 +28,50 @@ export default function DashboardPage() {
   return (
     <>
       {/* ── KPI cards ─────────────────────────────────────────────────── */}
-      <div className="cards-grid">
-        <div className="stat-card">
-          <div className="stat-label">Veículos disponíveis</div>
-          <div className="stat-value" style={{ color: 'var(--color-accent)' }}>{disponivel}</div>
-          <div className="stat-meta">
-            <Badge variant="green"><i className="ti ti-check" style={{ fontSize: 10 }} />prontos</Badge>
-          </div>
+      {loading ? (
+        <div className="cards-grid">
+          <div className="stat-card"><Skeleton height="60px" style={{ marginBottom: 8 }} /><Skeleton width="60%" /></div>
+          <div className="stat-card"><Skeleton height="60px" style={{ marginBottom: 8 }} /><Skeleton width="60%" /></div>
+          <div className="stat-card"><Skeleton height="60px" style={{ marginBottom: 8 }} /><Skeleton width="60%" /></div>
+          <div className="stat-card"><Skeleton height="60px" style={{ marginBottom: 8 }} /><Skeleton width="60%" /></div>
         </div>
+      ) : (
+        <div className="cards-grid">
+          <div className="stat-card">
+            <div className="stat-label">Veículos disponíveis</div>
+            <div className="stat-value" style={{ color: 'var(--color-accent)' }}>{disponivel}</div>
+            <div className="stat-meta">
+              <Badge variant="green"><i className="ti ti-check" style={{ fontSize: 10 }} />prontos</Badge>
+            </div>
+          </div>
 
-        <div className="stat-card">
-          <div className="stat-label">Em uso agora</div>
-          <div className="stat-value" style={{ color: 'var(--color-amber)' }}>{emUso}</div>
-          <div className="stat-meta">
-            <Badge variant="amber">em campo</Badge>
+          <div className="stat-card">
+            <div className="stat-label">Em uso agora</div>
+            <div className="stat-value" style={{ color: 'var(--color-amber)' }}>{emUso}</div>
+            <div className="stat-meta">
+              <Badge variant="amber">em campo</Badge>
+            </div>
           </div>
-        </div>
 
-        <div className="stat-card">
-          <div className="stat-label">Próximos agendamentos</div>
-          <div className="stat-value">{proximos.length}</div>
-          <div className="stat-meta">
-            <Badge variant="blue">hoje</Badge>
+          <div className="stat-card">
+            <div className="stat-label">Próximos agendamentos</div>
+            <div className="stat-value">{proximos.length}</div>
+            <div className="stat-meta">
+              <Badge variant="blue">hoje</Badge>
+            </div>
           </div>
-        </div>
 
-        <div className="stat-card">
-          <div className="stat-label">Última viagem</div>
-          <div className="stat-value" style={{ fontSize: 17, marginTop: 4 }}>
-            {lastTrip?.km ? `${lastTrip.km.toLocaleString('pt-BR', { minimumFractionDigits: 1 })} km` : '—'}
-          </div>
-          <div className="stat-meta">
-            {lastTrip ? `${lastTrip.vehiclePlate} · ${formatDateShort(lastTrip.date)}` : '—'}
+          <div className="stat-card">
+            <div className="stat-label">Última viagem</div>
+            <div className="stat-value" style={{ fontSize: 17, marginTop: 4 }}>
+              {lastTrip?.km ? `${lastTrip.km.toLocaleString('pt-BR', { minimumFractionDigits: 1 })} km` : '—'}
+            </div>
+            <div className="stat-meta">
+              {lastTrip ? `${lastTrip.vehiclePlate} · ${formatDateShort(lastTrip.date)}` : '—'}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* ── Vehicles in use ───────────────────────────────────────────── */}
       <div className="section-header">

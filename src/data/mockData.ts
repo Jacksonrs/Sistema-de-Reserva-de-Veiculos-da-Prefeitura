@@ -3,20 +3,22 @@ import type { Vehicle, Reservation, User } from '@/types'
 // ─── Users ────────────────────────────────────────────────────────────────────
 export const MOCK_USERS: User[] = [
   { id: 'u1', name: 'João Silva',    initials: 'JS', role: 'usuario', sector: 'Infraestrutura', email: 'joao.silva@prefeitura.gov.br',    active: true  },
-  { id: 'u2', name: 'Maria Souza',   initials: 'MS', role: 'admin',   sector: 'Transportes',   email: 'maria.souza@prefeitura.gov.br',   active: true  },
+  { id: 'u2', name: 'Ruan Pablo',   initials: 'R', role: 'usuario',   sector: 'Transportes',   email: 'ruan.pablo@prefeitura.gov.br', avatarUrl: 'ruan.jpeg', active: true  },
   { id: 'u3', name: 'Paulo Oliveira',initials: 'PO', role: 'usuario', sector: 'Administração', email: 'paulo.oliveira@prefeitura.gov.br', active: true  },
   { id: 'u4', name: 'Tânia Santos',  initials: 'TS', role: 'usuario', sector: 'Saúde',         email: 'tania.santos@prefeitura.gov.br',   active: true  },
   { id: 'u5', name: 'Ana Lima',      initials: 'AL', role: 'usuario', sector: 'Educação',      email: 'ana.lima@prefeitura.gov.br',       active: false },
   { id: 'u6', name: 'Carlos Mendes', initials: 'CM', role: 'usuario', sector: 'Obras',         email: 'carlos.mendes@prefeitura.gov.br',  active: true  },
+  { id: 'u7', name: 'Jackson', initials: 'J', role: 'admin', sector: 'TI', email: 'jackson@prefeitura.gov.br', avatarUrl: 'eu.png.jpeg', active: true }
 ]
 
 // ─── Login credentials ────────────────────────────────────────────────────────
 // usuario: joao / 12345678   |   admin: admin / admin123
 export const MOCK_CREDENTIALS: Record<string, { userId: string; password: string }> = {
   'joao':  { userId: 'u1', password: '12345678' },
-  'admin': { userId: 'u2', password: 'admin123' },
+  'ruan': { userId: 'u2', password: '12345678' },
   'paulo': { userId: 'u3', password: '12345678' },
   'tania': { userId: 'u4', password: '12345678' },
+  'jackson': { userId: 'u7', password: '12345678' },
 }
 
 // ─── Vehicles ─────────────────────────────────────────────────────────────────

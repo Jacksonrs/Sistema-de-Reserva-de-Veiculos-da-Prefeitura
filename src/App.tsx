@@ -16,28 +16,30 @@ import AdminUsuariosPage from '@/pages/admin/AdminUsuariosPage'
 function PageContent() {
   const { currentPage } = useApp()
   switch (currentPage) {
-    case 'dashboard':       return <DashboardPage />
-    case 'agendar':         return <AgendarPage />
-    case 'veiculos':        return <VeiculosPage />
-    case 'historico':       return <HistoricoPage />
-    case 'relatorios':      return <RelatoriosPage />
+    case 'dashboard': return <DashboardPage />
+    case 'agendar': return <AgendarPage />
+    case 'veiculos': return <VeiculosPage />
+    case 'historico': return <HistoricoPage />
+    case 'relatorios': return <RelatoriosPage />
     case 'admin-dashboard': return <AdminDashboardPage />
-    case 'admin-reservas':  return <AdminReservasPage />
-    case 'admin-veiculos':  return <AdminVeiculosPage />
-    case 'admin-usuarios':  return <AdminUsuariosPage />
-    default:                return <DashboardPage />
+    case 'admin-reservas': return <AdminReservasPage />
+    case 'admin-veiculos': return <AdminVeiculosPage />
+    case 'admin-usuarios': return <AdminUsuariosPage />
+    default: return <DashboardPage />
   }
 }
 
 export default function App() {
-  const { isAuthenticated } = useApp()
+  const { isAuthenticated, currentPage } = useApp()
   if (!isAuthenticated) return <><LoginPage /><Toast /></>
   return (
     <div className="app-shell">
       <Sidebar />
       <div className="main">
         <Topbar />
-        <div className="content"><PageContent /></div>
+        <div key={currentPage} className="content page-fade">
+          <PageContent />
+        </div>
       </div>
       <Toast />
     </div>

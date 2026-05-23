@@ -1,4 +1,5 @@
 import { useApp } from '@/context/AppContext'
+import Avatar from '@/components/Avatar'
 import type { PageName } from '@/types'
 
 const PAGE_TITLES: Record<PageName, string> = {
@@ -36,7 +37,7 @@ export default function Topbar() {
         </button>
 
         <div className="user-chip">
-          <div className={`avatar${isAdmin ? ' avatar-admin' : ''}`}>{currentUser?.initials}</div>
+          <Avatar initials={currentUser?.initials} avatarUrl={currentUser?.avatarUrl} isAdmin={isAdmin} />
           <div>
             <div style={{ fontWeight: 500, lineHeight: 1.2 }}>{currentUser?.name}</div>
             <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)', lineHeight: 1.2 }}>
