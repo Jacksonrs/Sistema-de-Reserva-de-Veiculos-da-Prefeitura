@@ -2,19 +2,19 @@ import { useApp } from '@/context/AppContext'
 import type { PageName } from '@/types'
 
 const PAGE_TITLES: Record<PageName, string> = {
-  'dashboard':       'Dashboard',
-  'agendar':         'Agendar veículo',
-  'veiculos':        'Frota disponível',
-  'historico':       'Minhas reservas',
-  'relatorios':      'Relatórios',
+  'dashboard': 'Dashboard',
+  'agendar': 'Agendar veículo',
+  'veiculos': 'Frota disponível',
+  'historico': 'Minhas reservas',
+  'relatorios': 'Relatórios',
   'admin-dashboard': 'Painel Administrativo',
-  'admin-reservas':  'Gerenciar Reservas',
-  'admin-veiculos':  'Cadastro de Veículos',
-  'admin-usuarios':  'Gerenciar Usuários',
+  'admin-reservas': 'Gerenciar Reservas',
+  'admin-veiculos': 'Cadastro de Veículos',
+  'admin-usuarios': 'Gerenciar Usuários',
 }
 
 export default function Topbar() {
-  const { currentPage, navigate, currentUser } = useApp()
+  const { currentPage, navigate, currentUser, isDark, toggleDark } = useApp()
   const isAdmin = currentUser?.role === 'admin'
 
   return (
@@ -27,6 +27,14 @@ export default function Topbar() {
             Nova reserva
           </button>
         )}
+        <button
+          className="icon-btn"
+          onClick={toggleDark}
+          title={isDark ? 'Modo claro' : 'Modo escuro'}
+        >
+          <i className={`ti ${isDark ? 'ti-sun' : 'ti-moon'}`} />
+        </button>
+
         <div className="user-chip">
           <div className={`avatar${isAdmin ? ' avatar-admin' : ''}`}>{currentUser?.initials}</div>
           <div>

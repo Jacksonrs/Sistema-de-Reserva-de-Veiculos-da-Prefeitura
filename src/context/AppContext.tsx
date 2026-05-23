@@ -37,8 +37,10 @@ interface AppContextValue {
   // Toast
   toast: Toast | null
   showToast: (message: string, type?: Toast['type']) => void
+  // Theme
+  isDark: boolean
+  toggleDark: () => void
 }
-
 // ─── Context ──────────────────────────────────────────────────────────────────
 const AppContext = createContext<AppContextValue | null>(null)
 
@@ -50,6 +52,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [reservations, setReservations] = useState<Reservation[]>(MOCK_RESERVATIONS)
   const [users, setUsers] = useState<User[]>(MOCK_USERS)
   const [toast, setToast] = useState<Toast | null>(null)
+
+  const [isDark, setIsDark] = useState<boolean>(() => {
+  const saved = localStorage.getItem('dc-theme')
+  return saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
+})
+
+document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
+
+const toggleDark = useCallback(() => {
+  setIsDark(prev => {
+    const next = !prev
+    localStorage.setItem('dc-theme', next ? 'dark' : 'light')
+    document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light')
+    return next
+  })
+}, [])
 
   const showToast = useCallback((message: string, type: Toast['type'] = 'success') => {
     setToast({ message, type })
@@ -167,7 +185,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       approveReservation, refuseReservation,
       addVehicle, updateVehicleStatus, deleteVehicle,
       toggleUserActive, addUser,
-      toast, showToast,
+      toast, showToast, isDark, toggleDark,
     }}>
       {children}
     </AppContext.Provider>
