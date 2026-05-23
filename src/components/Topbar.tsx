@@ -14,12 +14,18 @@ const PAGE_TITLES: Record<PageName, string> = {
   'admin-usuarios': 'Gerenciar Usuários',
 }
 
-export default function Topbar() {
+interface TopbarProps { onMenuClick: () => void }
+
+export default function Topbar({ onMenuClick }: TopbarProps) {
   const { currentPage, navigate, currentUser, isDark, toggleDark } = useApp()
   const isAdmin = currentUser?.role === 'admin'
 
   return (
+
     <header className="topbar">
+      <button className="icon-btn menu-btn" onClick={onMenuClick}>
+        <i className="ti ti-menu-2" />
+      </button>
       <div className="topbar-title">{PAGE_TITLES[currentPage]}</div>
       <div className="topbar-right">
         {!isAdmin && (

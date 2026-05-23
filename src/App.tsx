@@ -12,6 +12,7 @@ import AdminDashboardPage from '@/pages/admin/AdminDashboardPage'
 import AdminReservasPage from '@/pages/admin/AdminReservasPage'
 import AdminVeiculosPage from '@/pages/admin/AdminVeiculosPage'
 import AdminUsuariosPage from '@/pages/admin/AdminUsuariosPage'
+import { useState } from 'react'
 
 function PageContent() {
   const { currentPage } = useApp()
@@ -31,12 +32,13 @@ function PageContent() {
 
 export default function App() {
   const { isAuthenticated, currentPage } = useApp()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   if (!isAuthenticated) return <><LoginPage /><Toast /></>
   return (
     <div className="app-shell">
-      <Sidebar />
+      <Sidebar open = {sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="main">
-        <Topbar />
+        <Topbar onMenuClick={() => setSidebarOpen(s => !s)} />
         <div key={currentPage} className="content page-fade">
           <PageContent />
         </div>
