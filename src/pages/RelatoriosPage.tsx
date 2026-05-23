@@ -1,5 +1,9 @@
 import { useMemo } from 'react'
 import { useApp } from '@/context/AppContext'
+import {
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, Legend,
+} from 'recharts'
 
 export default function RelatoriosPage() {
   const { vehicles, reservations } = useApp()
@@ -33,12 +37,23 @@ export default function RelatoriosPage() {
     const bySectorArr = Object.entries(bySector)
       .map(([sector, v]) => ({ sector, ...v }))
       .sort((a, b) => b.trips - a.trips)
+    const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
 
-    return { completed, totalKm, avgKm, byVehicleArr, bySectorArr }
+    const reservasPorMes = MONTHS.map((name, i) => ({
+      name,
+      total: reservations.filter(r => new Date(r.date).getMonth() === i).length,
+    }))
+
+    const kmPorMes = MONTHS.map((name, i) => ({
+      name,
+      km: Math.round(completed.filter(r => new Date(r.date).getMonth() === i).reduce((s, r) => s + (r.km ?? 0), 0)),
+    }))
+
+    return { completed, totalKm, avgKm, byVehicleArr, bySectorArr, reservasPorMes, kmPorMes }
   }, [vehicles, reservations])
 
   const disponivel = vehicles.filter(v => v.status === 'disponivel').length
-  const emUso      = vehicles.filter(v => v.status === 'em-uso').length
+  const emUso = vehicles.filter(v => v.status === 'em-uso').length
   const utilizationPct = vehicles.length ? Math.round((emUso / vehicles.length) * 100) : 0
 
   return (
@@ -189,6 +204,34 @@ export default function RelatoriosPage() {
             ))}
           </tbody>
         </table>
+      </div>
+      {/* ── Gráficos ──────────────────────────────────────────────────── */}
+      <div className="section-header" style={{ marginTop: '1.25rem' }}>
+        <div className="section-title">Reservas por mês</div>
+      </div>
+      <div className="chart-card">
+        <ResponsiveContainer width="100%" height={220}>
+          <BarChart data={stats.reservasPorMes} barSize={28}>
+            <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
+            <Tooltip />
+            <Bar dataKey="total" name="Reservas" fill="#4d8df7" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="section-header">
+        <div className="section-title">KM rodados por mês</div>
+      </div>
+      <div className="chart-card">
+        <ResponsiveContainer width="100%" height={220}>
+          <BarChart data={stats.kmPorMes} barSize={28}>
+            <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 12 }} />
+            <Tooltip formatter ={(v: number) => [`${v} km`, 'KM']} />
+            <Bar dataKey="km" name="KM" fill="#7bc67e" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </>
   )
