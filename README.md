@@ -1,114 +1,135 @@
-# Fleet 🚗
+# Fleet - Gestão Inteligente de Frota Pública
 
-Sistema inteligente de gerenciamento e reserva de veículos para prefeituras e órgãos públicos.
-
-O Fleet foi desenvolvido com foco em organização de frota, controle de viagens e gerenciamento administrativo, permitindo que usuários solicitem reservas de veículos e administradores controlem toda a operação da frota em tempo real.
-
----
-
-# ✨ Visão Geral
-
-O sistema possui dois ambientes principais:
-
-## 👤 Usuário Comum
-- Login no sistema
-- Visualização de veículos disponíveis
-- Agendamento de reservas
-- Histórico de solicitações
-- Dashboard informativo
-
-## 🛠️ Administrador
-- Painel administrativo
-- Aprovação e recusa de reservas
-- Controle de veículos
-- Gerenciamento de usuários
-- Relatórios
-- Controle de status da frota
+<p align="center">
+  <a href="#">
+    <a href="https://github.com/Jacksonrs/Sistema-de-Reserva-de-Veiculos-da-Prefeitura">
+    <img src="https://img.shields.io/badge/projeto-conclu%C3%ADdo-brightgreen?style=for-the-badge&labelColor=434343" alt="Status do Projeto"/>
+  </a>
+  <a href="https://react.dev/">
+    <img src="https://img.shields.io/badge/React-18.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"/>
+  </a>
+  <a href="https://tailwindcss.com/">
+    <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind"/>
+  </a>
+  <a href="https://www.python.org/">
+    <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <a href="https://www.djangoproject.com/">
+    <img src="https://img.shields.io/badge/Django-5.0-092E20?style=for-the-badge&logo=django" alt="Django"/>
+  </a>
+  <a href="https://www.postgresql.org/">
+    <img src="https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
+  </a>
+</p>
 
 ---
 
-# 🖥️ Tecnologias Utilizadas
+## 1. Objetivo do sistema
 
-## Frontend
-- React
-- TypeScript
-- Tailwind CSS
-- React Router DOM
-- Context API
-
-## Ferramentas
-- Vite
-- Git
-- GitHub
-
-## Backend (Planejamento Futuro)
-- Django
-- Django REST Framework
-- PostgreSQL
+O *Fleet* é uma solução web desenvolvida para apoiar prefeituras e órgãos públicos na gestão da frota municipal e intermunicipal.  
+O objetivo principal é centralizar e modernizar o fluxo de informações de *veículos*, *servidores*, *viagens* e *métricas operacionais*. Substituindo os controlos manuais em papel por uma plataforma integrada, o sistema mitiga conflitos de agendamento, ociosidade de frotas e otimiza o planeamento das secretarias municipais (como Saúde, Educação e Infraestrutura).
 
 ---
 
-# 📂 Estrutura do Projeto
+## 2. Principais funcionalidades
+
+### Módulo do Solicitante (Usuário Comum)
+- Dashboard Pessoal: Visão geral resumida dos veículos disponíveis no momento e atalhos rápidos.
+- Consulta de Frota Ativa: Listagem completa dos veículos da prefeitura com barra de busca por placa/modelo e filtros rápidos por status.
+- Formulário de Agendamento: Solicitação intuitiva de veículos informando data, horários de saída/retorno, setor e destino/finalidade da viagem.
+- Linha do Tempo (Histórico): Acompanhamento cronológico do status de cada pedido e visualização da quilometragem percorrida.
+- Cancelamento de Solicitação: Permite ao utilizador cancelar agendamentos que ainda estejam aguardando análise.
+
+### Módulo de Administração (Gestor da Frota)
+- Painel Administrativo: Indicadores chave com o total de reservas pendentes, veículos em uso, unidades em manutenção e atividade recente.
+- Fluxo de Auditoria e Aprovação: Central de análise de pedidos com comandos rápidos para aprovar ou recusar solicitações (com inserção de justificativa).
+- Controle de Inventário (Frota): controle de veículos para registar placas, modelos, marcas, ano, tipo de combustível, capacidade e alteração manual de status.
+- Gestão de Utilizadores: Registo de novos servidores institucionais e controlo de ativação/desativação de contas.
+- Métricas Avançadas: Geração automática de relatórios visuais com gráficos de utilização por veículo, quilómetros rodados por mês e ranqueamento por secretaria.
+
+---
+
+## 3. Tecnologias utilizadas
+
+- Frontend: React.js, TypeScript, Vite, Tailwind CSS
+- Backend: Python, Django REST Framework
+- Banco de Dados: PostgreSQL
+- Controle de Versão: Git e GitHub
+- Metodologia de organização: Kanban
+- Biblioteca de Gráficos: Recharts
+- Iconografia: Tabler Icons (`@tabler/icons-react`)
+
+
+---
+
+## 4. Como executar o projeto
+
+### Pré-requisitos
+Antes de começar, certifique-se de ter instalado em sua máquina:
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/) (que inclui o gerenciador de pacotes `npm`)
+
+### 4.1 Clonar o repositório
 
 ```bash
-src/
-│
-├── components/
-│   ├── Sidebar.tsx
-│   ├── Topbar.tsx
-│   ├── Badge.tsx
-│   └── Toast.tsx
-│
-├── context/
-│   └── AppContext.tsx
-│
-├── data/
-│   └── mockData.ts
-│
-├── hooks/
-│
-├── pages/
-│   ├── DashboardPage.tsx
-│   ├── AgendarPage.tsx
-│   ├── VeiculosPage.tsx
-│   ├── HistoricoPage.tsx
-│   ├── RelatoriosPage.tsx
-│   └── LoginPage.tsx
-│
-├── types/
-│   └── index.ts
-│
-├── utils/
-│   └── formatters.ts
-│
-├── App.tsx
-├── main.tsx
-└── index.css
+git clone https://github.com/Jacksonrs/Sistema-de-Reserva-de-Veiculos-da-Prefeitura 
 
-## ⚙️ Como Rodar
+cd Sistema-de-Reserva-de-Veiculos-da-Prefeitura
+```
+
+### 4.2 Instalar as dependências do Frontend
 
 ```bash
-# Instalar dependências
 npm install
+```
 
-# Iniciar servidor de desenvolvimento
+### 4.3 Executar o ambiente de desenvolvimento local
+
+```bash
 npm run dev
+```
 
-# Build de produção
-npm run build
+Para acessar o sistema, basta abrir o navegador e colar a seguinte URL: http://localhost:5173/
 
+## 5. Como navegar/testar o protótipo
+O sistema conta com uma camada de dados simulados para validar toda a navegação e regras de negócio diretamente na interface. Para testar os diferentes fluxos e permissões, utilize as credenciais pré-configuradas abaixo:
 
-#######
+| Usuário (Login) | Senha | Perfil de Acesso | Interface e Permissões Disponíveis |
+|---|---|---|---|
+| joao | 12345678 | Usuário Comum | Dashboard simplificado, formulário de agendamento de veículos e linha do tempo de solicitações. |
+| admin ou jackson | 12345678 | Administrador | Painel gerencial, controle de usuários, cadastro de frota, relatórios gráficos e central de aprovação/recusa de viagens. |
 
-Acesse:
+## Screenshots
 
-http://localhost:5173
+### Tela de Acesso (Login Unificado)
+![Dashboard](./assets/Dashboard.png)
 
-🔑 Login de Demonstração
+## 6. Integrantes do grupo
 
-Utilize qualquer usuário e senha não vazios.
-
-Exemplo:
-
-Usuário: motorista01
-Senha: 12345678
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="hhttps://github.com/Jacksonrs">
+        <img src="https://avatars.githubusercontent.com/u/147336900?v=4" width="100px;" alt="Jackson Reanan"/><br>
+        <sub><b>Jackson Renan</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Ruanpabloband">
+        <img src="https://avatars.githubusercontent.com/u/166414190?v=4" width="100px;" alt="Ruan Pablo"/><br>
+        <sub><b>Ruan Pablo</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/marcelohdev">
+        <img src="https://avatars.githubusercontent.com/u/106102036?v=4" width="100px;" alt="Marcelo Henrique"/><br>
+        <sub><b>Marcelo Henrique</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/andevvs">
+        <img src="https://avatars.githubusercontent.com/u/150745935?v=4" width="100px;" alt="Andrei Vieira"/><br>
+        <sub><b>Andrei Vieira</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
