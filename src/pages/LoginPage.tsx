@@ -22,10 +22,8 @@ export default function LoginPage() {
       {/* Lado esquerdo */}
       <div className="login-left">
         <div className="login-left-logo">
-          <div className="logo-icon">
-            <i className="ti ti-steering-wheel" style={{ color: '#fff', fontSize: 20 }} />
-          </div>
-          <div className="logo-text" style={{ color: '#fff' }}>Fleet<span style={{ color: '#93c5fd' }}></span></div>
+          <img src="/fleet.png" alt="Logo" style={{ width: 56, height: 56, objectFit: 'contain', borderRadius: 12 }} />
+          <div className="logo-text" style={{ color: '#fff', fontSize: 24 }}>FLEET</div>
         </div>
         <div className="login-left-title">Gestão inteligente<br />da frota pública</div>
         <div className="login-left-sub">

@@ -32,10 +32,8 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       <aside className={`sidebar${open ? ' sidebar-open' : ''}`}>
 
       <div className="sidebar-logo">
-        <div className="logo-icon">
-          <i className="ti ti-steering-wheel" style={{ color: '#fff', fontSize: 16 }} aria-hidden="true" />
-        </div>
-        <div className="logo-text">FLEET</div>
+       <img src="/fleet.png" alt="Logo" style={{ width: 36, height: 36, objectFit: 'contain', borderRadius: 8 }} />
+       <div className="logo-text" style={{ color: '#fff' }}>FLEET</div>
       </div>
 
       {isAdmin && (
