@@ -109,7 +109,7 @@ O sistema conta com uma camada de dados simulados para validar toda a navegaçã
   <tr>
     <td align="center">
       <a href="hhttps://github.com/Jacksonrs">
-        <img src="https://avatars.githubusercontent.com/u/147336900?v=4" width="100px;" alt="Jackson Reanan"/><br>
+        <img src="https://avatars.githubusercontent.com/u/147336900?v=4" width="100px;" alt="Jackson Renan"/><br>
         <sub><b>Jackson Renan</b></sub>
       </a>
     </td>
