@@ -982,3 +982,25 @@ button, input, select, textarea {
     font-size: 12px;
   }
 }
+/* ─── Password toggle ────────────────────────────────────────────────────── */
+.password-toggle {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+
+.password-toggle:hover { color: var(--color-text-primary); }
+
+input[type="password"] {
+  font-size: 16px;
+  letter-spacing: 2px;
+}

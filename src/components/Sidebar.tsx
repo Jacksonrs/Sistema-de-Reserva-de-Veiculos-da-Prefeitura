@@ -7,7 +7,7 @@ const USER_NAV: NavItem[] = [
   { page: 'dashboard', icon: 'ti-layout-dashboard', label: 'Dashboard' },
   { page: 'agendar', icon: 'ti-calendar-plus', label: 'Agendar veículo' },
   { page: 'veiculos', icon: 'ti-car', label: 'Frota disponível' },
-  { page: 'historico', icon: 'ti-clock-history', label: 'Minhas reservas' },
+  { page: 'historico', icon: 'ti-calendar-check', label: 'Minhas reservas' },
   { page: 'relatorios', icon: 'ti-chart-bar', label: 'Relatórios' },
 ]
 

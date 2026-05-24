@@ -6,6 +6,7 @@ export default function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -50,8 +51,15 @@ export default function LoginPage() {
               <label htmlFor="login-pass">Senha</label>
               <div className="field-input-wrap">
                 <i className="ti ti-lock" />
-                <input id="login-pass" type="password" className="form-input" placeholder="••••••••"
+                <input id="login-pass" type={showPassword ? 'text' : 'password'} className="form-input" placeholder="••••••••"
                   value={password} onChange={e => setPassword(e.target.value)} />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(s => !s)}
+                >
+                  <i className={`ti ${showPassword ? 'ti-eye-off' : 'ti-eye'}`} />
+                </button>
               </div>
             </div>
             {error && <p style={{ fontSize: 12, color: 'var(--color-red)', marginBottom: '.75rem' }}>{error}</p>}
