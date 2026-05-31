@@ -1,0 +1,114 @@
+[
+  {
+    "model": "usuarios.usuario",
+    "pk": 1,
+    "fields": {
+      "username": "jackson",
+      "name": "Jackson",
+      "initials": "J",
+      "email": "jackson@prefeitura.gov.br",
+      "role": "admin",
+      "sector": "TI",
+      "active": true,
+      "is_staff": true,
+      "is_superuser": false,
+      "password": "pbkdf2_sha256$600000$salt$hashedpassword"
+    }
+  },
+  {
+    "model": "usuarios.usuario",
+    "pk": 2,
+    "fields": {
+      "username": "joao",
+      "name": "João Silva",
+      "initials": "JS",
+      "email": "joao.silva@prefeitura.gov.br",
+      "role": "usuario",
+      "sector": "Infraestrutura",
+      "active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "password": "pbkdf2_sha256$600000$salt$hashedpassword"
+    }
+  },
+  {
+    "model": "usuarios.usuario",
+    "pk": 3,
+    "fields": {
+      "username": "ruan",
+      "name": "Ruan Pablo",
+      "initials": "R",
+      "email": "ruan.pablo@prefeitura.gov.br",
+      "role": "usuario",
+      "sector": "Transportes",
+      "active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "password": "pbkdf2_sha256$600000$salt$hashedpassword"
+    }
+  },
+  {
+    "model": "usuarios.usuario",
+    "pk": 4,
+    "fields": {
+      "username": "paulo",
+      "name": "Paulo Oliveira",
+      "initials": "PO",
+      "email": "paulo.oliveira@prefeitura.gov.br",
+      "role": "usuario",
+      "sector": "Administração",
+      "active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "password": "pbkdf2_sha256$600000$salt$hashedpassword"
+    }
+  },
+  {
+    "model": "usuarios.usuario",
+    "pk": 5,
+    "fields": {
+      "username": "tania",
+      "name": "Tânia Santos",
+      "initials": "TS",
+      "email": "tania.santos@prefeitura.gov.br",
+      "role": "usuario",
+      "sector": "Saúde",
+      "active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "password": "pbkdf2_sha256$600000$salt$hashedpassword"
+    }
+  },
+  {
+    "model": "usuarios.usuario",
+    "pk": 6,
+    "fields": {
+      "username": "ana",
+      "name": "Ana Lima",
+      "initials": "AL",
+      "email": "ana.lima@prefeitura.gov.br",
+      "role": "usuario",
+      "sector": "Educação",
+      "active": false,
+      "is_staff": false,
+      "is_superuser": false,
+      "password": "pbkdf2_sha256$600000$salt$hashedpassword"
+    }
+  },
+  {
+    "model": "usuarios.usuario",
+    "pk": 7,
+    "fields": {
+      "username": "carlos",
+      "name": "Carlos Mendes",
+      "initials": "CM",
+      "email": "carlos.mendes@prefeitura.gov.br",
+      "role": "usuario",
+      "sector": "Obras",
+      "active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "password": "pbkdf2_sha256$600000$salt$hashedpassword"
+    }
+  }
+]
