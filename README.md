@@ -1,187 +1,135 @@
-# Backend — Sistema de Reserva de Veículos da Prefeitura
+# Fleet - Gestão Inteligente de Frota Pública
 
-API REST em Django + DRF com autenticação JWT.
+<p align="center">
+  <a href="#">
+    <a href="https://github.com/Jacksonrs/Sistema-de-Reserva-de-Veiculos-da-Prefeitura">
+    <img src="https://img.shields.io/badge/projeto-conclu%C3%ADdo-brightgreen?style=for-the-badge&labelColor=434343" alt="Status do Projeto"/>
+  </a>
+  <a href="https://react.dev/">
+    <img src="https://img.shields.io/badge/React-18.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"/>
+  </a>
+  <a href="https://tailwindcss.com/">
+    <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind"/>
+  </a>
+  <a href="https://www.python.org/">
+    <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <a href="https://www.djangoproject.com/">
+    <img src="https://img.shields.io/badge/Django-5.0-092E20?style=for-the-badge&logo=django" alt="Django"/>
+  </a>
+  <a href="https://www.postgresql.org/">
+    <img src="https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
+  </a>
+</p>
 
 ---
 
-## Estrutura do projeto
+## 1. Objetivo do sistema
 
-```
-backend/
-├── core/               # Configurações Django (settings, urls, wsgi)
-├── usuarios/           # Model customizado, auth JWT, CRUD de usuários
-├── veiculos/           # CRUD de veículos + atualização de status
-├── reservas/           # Solicitações, aprovação, recusa, histórico, stats
-├── seed.py             # Popula banco com dados iniciais do frontend
-├── manage.py
-└── requirements.txt
-```
+O *Fleet* é uma solução web desenvolvida para apoiar prefeituras e órgãos públicos na gestão da frota municipal e intermunicipal.  
+O objetivo principal é centralizar e modernizar o fluxo de informações de *veículos*, *servidores*, *viagens* e *métricas operacionais*. Substituindo os controlos manuais em papel por uma plataforma integrada, o sistema mitiga conflitos de agendamento, ociosidade de frotas e otimiza o planeamento das secretarias municipais (como Saúde, Educação e Infraestrutura).
 
 ---
 
-## Como rodar
+## 2. Principais funcionalidades
 
-### 1. Criar e ativar o ambiente virtual
+### Módulo do Solicitante (Usuário Comum)
+- Dashboard Pessoal: Visão geral resumida dos veículos disponíveis no momento e atalhos rápidos.
+- Consulta de Frota Ativa: Listagem completa dos veículos da prefeitura com barra de busca por placa/modelo e filtros rápidos por status.
+- Formulário de Agendamento: Solicitação intuitiva de veículos informando data, horários de saída/retorno, setor e destino/finalidade da viagem.
+- Linha do Tempo (Histórico): Acompanhamento cronológico do status de cada pedido e visualização da quilometragem percorrida.
+- Cancelamento de Solicitação: Permite ao utilizador cancelar agendamentos que ainda estejam aguardando análise.
+
+### Módulo de Administração (Gestor da Frota)
+- Painel Administrativo: Indicadores chave com o total de reservas pendentes, veículos em uso, unidades em manutenção e atividade recente.
+- Fluxo de Auditoria e Aprovação: Central de análise de pedidos com comandos rápidos para aprovar ou recusar solicitações (com inserção de justificativa).
+- Controle de Inventário (Frota): controle de veículos para registar placas, modelos, marcas, ano, tipo de combustível, capacidade e alteração manual de status.
+- Gestão de Utilizadores: Registo de novos servidores institucionais e controlo de ativação/desativação de contas.
+- Métricas Avançadas: Geração automática de relatórios visuais com gráficos de utilização por veículo, quilómetros rodados por mês e ranqueamento por secretaria.
+
+---
+
+## 3. Tecnologias utilizadas
+
+- Frontend: React.js, TypeScript, Vite, Tailwind CSS
+- Backend: Python, Django REST Framework
+- Banco de Dados: PostgreSQL
+- Controle de Versão: Git e GitHub
+- Metodologia de organização: Kanban
+- Biblioteca de Gráficos: Recharts
+- Iconografia: Tabler Icons (`@tabler/icons-react`)
+
+
+---
+
+## 4. Como executar o projeto
+
+### Pré-requisitos
+Antes de começar, certifique-se de ter instalado em sua máquina:
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/) (que inclui o gerenciador de pacotes `npm`)
+
+### 4.1 Clonar o repositório
 
 ```bash
-cd backend
-python -m venv venv
+git clone https://github.com/Jacksonrs/Sistema-de-Reserva-de-Veiculos-da-Prefeitura 
 
-# Windows
-venv\Scripts\activate
-
-# Linux / Mac
-source venv/bin/activate
+cd Sistema-de-Reserva-de-Veiculos-da-Prefeitura
 ```
 
-### 2. Instalar dependências
+### 4.2 Instalar as dependências do Frontend
 
 ```bash
-pip install -r requirements.txt
+npm install
 ```
 
-### 3. Configurar variáveis de ambiente
+### 4.3 Executar o ambiente de desenvolvimento local
 
 ```bash
-cp .env.example .env
-# Edite o .env se necessário (a chave padrão funciona em desenvolvimento)
+npm run dev
 ```
 
-### 4. Criar as tabelas do banco
+Para acessar o sistema, basta abrir o navegador e colar a seguinte URL: http://localhost:5173/
 
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
+## 5. Como navegar/testar o protótipo
+O sistema conta com uma camada de dados simulados para validar toda a navegação e regras de negócio diretamente na interface. Para testar os diferentes fluxos e permissões, utilize as credenciais pré-configuradas abaixo:
 
-### 5. Popular o banco com dados iniciais
+| Usuário (Login) | Senha | Perfil de Acesso | Interface e Permissões Disponíveis |
+|---|---|---|---|
+| joao | 12345678 | Usuário Comum | Dashboard simplificado, formulário de agendamento de veículos e linha do tempo de solicitações. |
+| admin ou jackson | 12345678 | Administrador | Painel gerencial, controle de usuários, cadastro de frota, relatórios gráficos e central de aprovação/recusa de viagens. |
 
-```bash
-python seed.py
-```
+## Screenshots
 
-Isso cria todos os usuários, veículos e reservas de exemplo do mockData do frontend.
+### Tela de Acesso (Login Unificado)
+![Dashboard](./assets/Dashboard.png)
 
-### 6. Iniciar o servidor
+## 6. Integrantes do grupo
 
-```bash
-python manage.py runserver
-```
-
-API disponível em: **http://localhost:8000/api/**
-
----
-
-## Credenciais iniciais
-
-| Usuário   | Senha     | Perfil  |
-|-----------|-----------|---------|
-| jackson   | 12345678  | admin   |
-| joao      | 12345678  | usuario |
-| ruan      | 12345678  | usuario |
-| paulo     | 12345678  | usuario |
-| tania     | 12345678  | usuario |
-| carlos    | 12345678  | usuario |
-
----
-
-## Endpoints da API
-
-### Autenticação
-
-| Método | Endpoint            | Descrição                         | Acesso |
-|--------|---------------------|-----------------------------------|--------|
-| POST   | `/api/auth/login/`  | Login → retorna `access` + `refresh` + `user` | Público |
-| POST   | `/api/auth/refresh/`| Renova o access token             | Público |
-| GET    | `/api/auth/me/`     | Dados do usuário autenticado      | Autenticado |
-
-**Exemplo de login:**
-```json
-POST /api/auth/login/
-{
-  "username": "jackson",
-  "password": "12345678"
-}
-```
-
----
-
-### Usuários (apenas admin)
-
-| Método | Endpoint                          | Descrição              |
-|--------|-----------------------------------|------------------------|
-| GET    | `/api/usuarios/`                  | Lista todos            |
-| POST   | `/api/usuarios/`                  | Cria novo usuário      |
-| GET    | `/api/usuarios/<id>/`             | Detalhe                |
-| PATCH  | `/api/usuarios/<id>/`             | Atualiza               |
-| DELETE | `/api/usuarios/<id>/`             | Remove                 |
-| PATCH  | `/api/usuarios/<id>/toggle-ativo/`| Ativa / desativa       |
-
----
-
-### Veículos
-
-| Método | Endpoint                      | Descrição                    | Acesso      |
-|--------|-------------------------------|------------------------------|-------------|
-| GET    | `/api/veiculos/`              | Lista todos (filtro: `?status=disponivel`) | Autenticado |
-| POST   | `/api/veiculos/`              | Cadastra                     | Admin       |
-| GET    | `/api/veiculos/<id>/`         | Detalhe                      | Autenticado |
-| PATCH  | `/api/veiculos/<id>/`         | Atualiza                     | Admin       |
-| DELETE | `/api/veiculos/<id>/`         | Remove                       | Admin       |
-| PATCH  | `/api/veiculos/<id>/status/`  | Atualiza status              | Admin       |
-
----
-
-### Reservas
-
-| Método | Endpoint                        | Descrição                          | Acesso      |
-|--------|---------------------------------|------------------------------------|-------------|
-| GET    | `/api/reservas/`                | Lista (admin: todas; user: suas)   | Autenticado |
-| POST   | `/api/reservas/`                | Solicita reserva                   | Autenticado |
-| GET    | `/api/reservas/<id>/`           | Detalhe                            | Autenticado |
-| PATCH  | `/api/reservas/<id>/cancelar/`  | Cancela                            | Dono/Admin  |
-| PATCH  | `/api/reservas/<id>/acao/`      | Aprovar / recusar / finalizar      | Admin       |
-| GET    | `/api/reservas/stats/`          | Contadores do dashboard            | Admin       |
-
-**Ação do admin:**
-```json
-PATCH /api/reservas/1/acao/
-{
-  "action": "aprovar"          // ou "recusar" ou "finalizar"
-  "admin_note": "Motivo...",   // (opcional, usado em recusa)
-  "km": 42.5                   // (opcional, usado em finalizar)
-}
-```
-
----
-
-## Usando com o frontend React
-
-No seu frontend, troque as chamadas ao `mockData` por chamadas à API.
-Salve o token JWT no `localStorage` após o login e envie no header:
-
-```ts
-// Exemplo de login
-const res = await fetch('http://localhost:8000/api/auth/login/', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ username, password }),
-})
-const { access, refresh, user } = await res.json()
-localStorage.setItem('token', access)
-
-// Exemplo de requisição autenticada
-const resp = await fetch('http://localhost:8000/api/veiculos/', {
-  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-})
-```
-
----
-
-## Admin do Django
-
-Acesse `http://localhost:8000/admin/` com:
-```
-python manage.py createsuperuser
-```
-Ou use o usuário **jackson** após rodar o seed (defina `is_superuser=True` via shell se precisar).
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://github.com/Jacksonrs">
+        <img src="https://avatars.githubusercontent.com/u/147336900?v=4" width="100px;" alt="Jackson Renan"/><br>
+        <sub><b>Jackson Renan</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Ruanpabloband">
+        <img src="https://avatars.githubusercontent.com/u/166414190?v=4" width="100px;" alt="Ruan Pablo"/><br>
+        <sub><b>Ruan Pablo</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/marcelohdev">
+        <img src="https://avatars.githubusercontent.com/u/106102036?v=4" width="100px;" alt="Marcelo Henrique"/><br>
+        <sub><b>Marcelo Henrique</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/andevvs">
+        <img src="https://avatars.githubusercontent.com/u/150745935?v=4" width="100px;" alt="Andrei Vieira"/><br>
+        <sub><b>Andrei Vieira</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
