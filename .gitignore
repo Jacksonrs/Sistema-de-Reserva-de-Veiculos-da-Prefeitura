@@ -1,16 +1,48 @@
+# ===========================
 # Frontend
+# ===========================
 frontend/node_modules/
 frontend/dist/
+frontend/.env
 
+# ===========================
 # Backend
+# ===========================
 backend/venv/
-backend/__pycache__/
-backend/*/__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
 backend/db.sqlite3
 backend/.env
+backend/.pytest_cache/
+backend/htmlcov/
+backend/.coverage
 
-# VS Code
+# ===========================
+# Rede de Segurança Global
+# ===========================
+.env
+
+# ===========================
+# VS Code e outros editores
+# ===========================
 .vscode/
+.idea/
 
+# ===========================
 # Logs
+# ===========================
 *.log
+
+# ===========================
+# Sistema Operacional
+# ===========================
+.DS_Store
+Thumbs.db
+
+# ===========================
+# Arquivos de Entrega Acadêmica
+# ===========================
+*.zip
+*.rar
+*.tar.gz

@@ -1,8 +1,7 @@
 # Fleet - Gestão Inteligente de Frota Pública
 
 <p align="center">
-  <a href="#">
-    <a href="https://github.com/Jacksonrs/Sistema-de-Reserva-de-Veiculos-da-Prefeitura">
+  <a href="https://github.com/Jacksonrs/Sistema-de-Reserva-de-Veiculos-da-Prefeitura">
     <img src="https://img.shields.io/badge/projeto-conclu%C3%ADdo-brightgreen?style=for-the-badge&labelColor=434343" alt="Status do Projeto"/>
   </a>
   <a href="https://react.dev/">
@@ -13,11 +12,12 @@
   </a>
   <a href="https://www.python.org/">
     <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  </a>
   <a href="https://www.djangoproject.com/">
     <img src="https://img.shields.io/badge/Django-5.0-092E20?style=for-the-badge&logo=django" alt="Django"/>
   </a>
-  <a href="https://www.postgresql.org/">
-    <img src="https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
+  <a href="https://www.sqlite.org/">
+    <img src="https://img.shields.io/badge/SQLite-3-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite"/>
   </a>
 </p>
 
@@ -52,21 +52,21 @@ O objetivo principal é centralizar e modernizar o fluxo de informações de *ve
 
 - Frontend: React.js, TypeScript, Vite, Tailwind CSS
 - Backend: Python, Django REST Framework
-- Banco de Dados: PostgreSQL
+- Banco de Dados: SQLite (pré-configurado)
 - Controle de Versão: Git e GitHub
 - Metodologia de organização: Kanban
 - Biblioteca de Gráficos: Recharts
-- Iconografia: Tabler Icons (`@tabler/icons-react`)
-
 
 ---
 
 ## 4. Como executar o projeto
 
 ### Pré-requisitos
-Antes de começar, certifique-se de ter instalado em sua máquina:
-- [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/) (que inclui o gerenciador de pacotes `npm`)
+Antes de começar, certifique-se de ter as seguintes ferramentas instaladas:
+ 
+- [Git](https://git-scm.com/) (para clonar o repositório)
+- [Node.js](https://nodejs.org/) v18 ou superior (para o frontend React/Vite)
+- [Python](https://www.python.org/) 3.10 ou superior (para o backend Django)
 
 ### 4.1 Clonar o repositório
 
@@ -76,34 +76,136 @@ git clone https://github.com/Jacksonrs/Sistema-de-Reserva-de-Veiculos-da-Prefeit
 cd Sistema-de-Reserva-de-Veiculos-da-Prefeitura
 ```
 
-### 4.2 Instalar as dependências do Frontend
+### 4.2 Configurar o Backend (Django)
 
+Abra um terminal e entre na pasta do backend:
+ 
+```bash
+cd backend
+```
+ 
+Crie e ative o ambiente virtual do Python:
+ 
+```bash
+# No Windows:
+python -m venv venv
+venv\Scripts\activate
+ 
+# No Linux/Mac:
+python3 -m venv venv
+source venv/bin/activate
+```
+ 
+Instale as dependências:
+ 
+```bash
+pip install -r requirements.txt
+```
+
+Aplique as migrações para criar as tabelas no banco:
+ 
+```bash
+python manage.py migrate
+```
+ 
+Crie o primeiro usuário administrador:
+ 
+```bash
+python manage.py createsuperuser
+```
+ 
+Siga as instruções no terminal para definir o e-mail e a senha do administrador.
+ 
+Suba o servidor:
+ 
+```bash
+python manage.py runserver
+```
+ 
+- O backend estará rodando em `http://localhost:8000`
+
+---
+
+### 4.3 Configurar o Frontend (React/Vite)
+ 
+Abra um **novo terminal** (mantenha o terminal do backend rodando) e entre na pasta do frontend:
+ 
+```bash
+cd frontend
+```
+ 
+Instale as dependências:
+ 
 ```bash
 npm install
 ```
 
-### 4.3 Executar o ambiente de desenvolvimento local
-
+Suba o servidor do frontend:
+ 
 ```bash
 npm run dev
 ```
+ 
+- O frontend estará rodando (geralmente em `http://localhost:5173`). O terminal exibirá o link exato.
+ 
+--- 
 
-Para acessar o sistema, basta abrir o navegador e colar a seguinte URL: http://localhost:5173/
+## 5. Como Navegar e Testar o Sistema
 
-## 5. Como navegar/testar o protótipo
-O sistema conta com uma camada de dados simulados para validar toda a navegação e regras de negócio diretamente na interface. Para testar os diferentes fluxos e permissões, utilize as credenciais pré-configuradas abaixo:
+1. Acesse o sistema em `http://localhost:5173` com o superusuário criado.
+2. Cadastre:
+   - Alguns veículos para compor a frota inicial.
+   - (Opcional) Alguns usuários de teste, caso não queira criá-los pelo frontend.
+3. Entenda os perfis de acesso do sistema:
+| Usuário (exemplo) | Perfil       | Acesso principal                                                               |
+| ----------------- | ------------ | ------------------------------------------------------------------------------ |
+| admin             | Gestor/Admin | Acesso total. Gestão de frota, painel de controle e administração de usuários. |
+| colaborador1      | Usuário      | Painel padrão. Visualização de veículos disponíveis e realização de reservas.  |
 
-| Usuário (Login) | Senha | Perfil de Acesso | Interface e Permissões Disponíveis |
-|---|---|---|---|
-| joao | 12345678 | Usuário Comum | Dashboard simplificado, formulário de agendamento de veículos e linha do tempo de solicitações. |
-| admin ou jackson | 12345678 | Administrador | Painel gerencial, controle de usuários, cadastro de frota, relatórios gráficos e central de aprovação/recusa de viagens. |
+4. Faça login no frontend (`http://localhost:5173`) como:
+   - **Usuário comum:** acesse o painel principal, visualize a lista de veículos e crie uma nova reserva.
+   - **Gestor/Admin:** acesse a tela de Gestão de Usuários, adicione um novo usuário, altere o status (ativo/inativo) e exclua um registro para testar as validações e os pop-ups de confirmação.
+
+---
+
+## 6. Estrutura de Pastas do Projeto
+
+```
+Sistema-de-Reserva-de-Veiculos-da-Prefeitura/
+│
+├── backend/                          # Aplicação Django
+│   ├── venv/                         # Ambiente virtual Python
+│   ├── manage.py                     # Arquivo de gerenciamento Django
+│   ├── requirements.txt              # Dependências Python
+│   ├── db.sqlite3                    # Banco de dados SQLite (local, pré-configurado)
+│   └── [apps Django]/                # Aplicações Django (reservas, usuários, etc.)
+│
+├── frontend/                         # Aplicação React/Vite
+│   ├── node_modules/                 # Dependências Node.js
+│   ├── src/
+│   │   ├── components/               # Componentes React reutilizáveis
+│   │   ├── pages/                    # Páginas principais
+│   │   ├── assets/                   # Imagens, ícones, etc.
+│   │   ├── styles/                   # Arquivos Tailwind CSS
+│   │   └── App.jsx                   # Componente raiz
+│   ├── package.json                  # Dependências e scripts npm
+│   └── vite.config.js                # Configuração do Vite
+│
+├── assets/                           # Screenshots e documentação visual
+├── README.md                         # Este arquivo
+└── .gitignore                        # Arquivos ignorados pelo Git
+```
+
+---
 
 ## Screenshots
 
 ### Tela de Acesso (Login Unificado)
 ![Dashboard](./assets/Dashboard.png)
 
-## 6. Integrantes do grupo
+---
+
+## 7. Integrantes do grupo
 
 <table align="center">
   <tr>
