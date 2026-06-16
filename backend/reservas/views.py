@@ -89,6 +89,15 @@ class CancelarReservaView(APIView):
 
         reserva.status = 'cancelada'
         reserva.save()
+
+        veiculo = reserva.veiculo
+        veiculo.status = 'disponivel'
+        veiculo.current_driver = None
+        veiculo.current_driver_initials = None
+        veiculo.current_destination = None
+        veiculo.departure_time = None
+        veiculo.save()
+
         return Response(ReservaSerializer(reserva).data)
 
 
@@ -113,18 +122,45 @@ class AcaoAdminReservaView(APIView):
         admin_note = serializer.validated_data.get('admin_note', '')
         km         = serializer.validated_data.get('km')
 
+        veiculo = reserva.veiculo
+
         if action == 'aprovar':
             if reserva.status != 'pendente':
                 return Response({'detail': 'Apenas reservas pendentes podem ser aprovadas.'},
                                 status=status.HTTP_400_BAD_REQUEST)
+            if veiculo.status == 'manutencao':
+                return Response({'detail': 'Este veículo está em manutenção.'},
+                                status=status.HTTP_400_BAD_REQUEST)
+            conflitos = Reserva.objects.filter(
+                veiculo=veiculo, date=reserva.date,
+                status__in=['reservado', 'em-uso'],
+            ).filter(
+                departure_time__lt=reserva.return_time,
+                return_time__gt=reserva.departure_time,
+            ).exclude(pk=reserva.pk)
+            if conflitos.exists():
+                return Response({'detail': 'Já existe outra reserva para este horário.'},
+                                status=status.HTTP_400_BAD_REQUEST)
             reserva.status = 'reservado'
+            veiculo.status = 'em-uso'
+            veiculo.current_driver = reserva.driver_name
+            veiculo.current_driver_initials = reserva.driver_initials
+            veiculo.current_destination = reserva.destination
+            veiculo.departure_time = reserva.departure_time
 
         elif action == 'recusar':
             if reserva.status not in ('pendente', 'reservado'):
                 return Response({'detail': 'Apenas reservas pendentes ou aprovadas podem ser recusadas.'},
                                 status=status.HTTP_400_BAD_REQUEST)
+            estava_reservado = reserva.status == 'reservado'
             reserva.status     = 'recusada'
             reserva.admin_note = admin_note
+            if estava_reservado:
+                veiculo.status = 'disponivel'
+                veiculo.current_driver = None
+                veiculo.current_driver_initials = None
+                veiculo.current_destination = None
+                veiculo.departure_time = None
 
         elif action == 'finalizar':
             if reserva.status not in ('reservado', 'em-uso'):
@@ -133,8 +169,14 @@ class AcaoAdminReservaView(APIView):
             reserva.status = 'finalizada'
             if km is not None:
                 reserva.km = km
+            veiculo.status = 'disponivel'
+            veiculo.current_driver = None
+            veiculo.current_driver_initials = None
+            veiculo.current_destination = None
+            veiculo.departure_time = None
 
         reserva.save()
+        veiculo.save()
         return Response(ReservaSerializer(reserva).data)
 
 

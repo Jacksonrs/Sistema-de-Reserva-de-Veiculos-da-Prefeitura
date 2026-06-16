@@ -1,3 +1,5 @@
+from datetime import date, time
+from django.db.models import Q
 from rest_framework import serializers
 from .models import Reserva
 
@@ -33,6 +35,21 @@ class ReservaCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {'veiculo': 'Este veículo está em manutenção e não pode ser reservado.'}
             )
+
+        if veiculo and data.get('date') and data.get('departure_time') and data.get('return_time'):
+            conflitos = Reserva.objects.filter(
+                veiculo=veiculo,
+                date=data['date'],
+                status__in=['pendente', 'reservado', 'em-uso'],
+            ).filter(
+                Q(departure_time__lt=data['return_time'],
+                  return_time__gt=data['departure_time'])
+            )
+            if conflitos.exists():
+                raise serializers.ValidationError(
+                    {'veiculo': 'Este veículo já possui reserva neste horário.'}
+                )
+
         return data
 
     def create(self, validated_data):
