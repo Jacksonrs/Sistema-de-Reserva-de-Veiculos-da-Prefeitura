@@ -1,10 +1,12 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useApp } from '@/context/AppContext'
 import Badge from '@/components/Badge'
 import { reservationStatusBadge, reservationStatusLabel, formatDate, vehicleStatusBadge, vehicleStatusLabel } from '@/utils/formatters'
 
 export default function AdminDashboardPage() {
   const { reservations, vehicles, users, navigate, approveReservation, refuseReservation } = useApp()
+  const [refuseId, setRefuseId] = useState<string | null>(null)
+  const [refuseNote, setRefuseNote] = useState('')
 
   const stats = useMemo(() => ({
     pending:    reservations.filter(r => r.status === 'pendente').length,
@@ -16,6 +18,13 @@ export default function AdminDashboardPage() {
 
   const pendingList = reservations.filter(r => r.status === 'pendente')
   const recentAll   = [...reservations].sort((a, b) => b.id.localeCompare(a.id)).slice(0, 6)
+
+  function confirmRefuse() {
+    if (!refuseId) return
+    refuseReservation(refuseId, refuseNote || undefined)
+    setRefuseId(null)
+    setRefuseNote('')
+  }
 
   return (
     <>
@@ -70,13 +79,34 @@ export default function AdminDashboardPage() {
                 <button className="btn-sm btn-green" onClick={() => approveReservation(r.id)}>
                   <i className="ti ti-check" /> Aprovar
                 </button>
-                <button className="btn-sm btn-red" onClick={() => refuseReservation(r.id)}>
+                <button className="btn-sm btn-red" onClick={() => { setRefuseId(r.id); setRefuseNote('') }}>
                   <i className="ti ti-x" /> Recusar
                 </button>
               </div>
             </div>
           ))}
         </>
+      )}
+
+      {/* Refuse modal */}
+      {refuseId && (
+        <div className="modal-overlay" onClick={() => setRefuseId(null)}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <div className="modal-title">Recusar reserva</div>
+            <div className="modal-sub">Informe um motivo (opcional).</div>
+            <textarea
+              className="form-input"
+              style={{ height: 80, resize: 'vertical', marginBottom: '1rem' }}
+              placeholder="Ex: veículo já reservado para essa data..."
+              value={refuseNote}
+              onChange={e => setRefuseNote(e.target.value)}
+            />
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button className="btn-sm btn-red" onClick={confirmRefuse}>Confirmar recusa</button>
+              <button className="btn-sm" onClick={() => setRefuseId(null)}>Cancelar</button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* ── Fleet status ──────────────────────────────────────────────── */}
@@ -101,7 +131,7 @@ export default function AdminDashboardPage() {
               <tr key={v.id}>
                 <td><strong className="mono">{v.plate}</strong></td>
                 <td>{v.brand} {v.model}</td>
-                <td>{v.type}</td>
+                <td>{v.vehicleType}</td>
                 <td>{v.capacity} lug.</td>
                 <td><Badge variant={vehicleStatusBadge(v.status)}>{vehicleStatusLabel(v.status)}</Badge></td>
                 <td>

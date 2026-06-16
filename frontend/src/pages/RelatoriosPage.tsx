@@ -7,6 +7,7 @@ import {
 
 export default function RelatoriosPage() {
   const { vehicles, reservations } = useApp()
+  const currentMonth = new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
 
   const stats = useMemo(() => {
     const completed = reservations.filter(r => r.status === 'finalizada')
@@ -70,7 +71,7 @@ export default function RelatoriosPage() {
           <div className="stat-value">
             {stats.totalKm.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
           </div>
-          <div className="stat-meta">km em maio/2026</div>
+          <div className="stat-meta">km em {currentMonth}</div>
         </div>
         <div className="stat-card">
           <div className="stat-label">Média por viagem</div>
@@ -228,7 +229,7 @@ export default function RelatoriosPage() {
           <BarChart data={stats.kmPorMes} barSize={28}>
             <XAxis dataKey="name" tick={{ fontSize: 12 }} />
             <YAxis tick={{ fontSize: 12 }} />
-            <Tooltip formatter ={(v: number) => [`${v} km`, 'KM']} />
+            <Tooltip formatter={(v) => [`${v} km`, 'KM']} />
             <Bar dataKey="km" name="KM" fill="#7bc67e" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>

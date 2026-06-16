@@ -1,6 +1,6 @@
 import {
   createContext, useContext, useState, useCallback,
-  useEffect, type ReactNode,
+  useEffect, useRef, type ReactNode,
 } from 'react'
 import type {
   User, Vehicle, Reservation, PageName,
@@ -37,11 +37,15 @@ interface AppContextValue {
   // Admin actions
   approveReservation: (id: string) => Promise<void>
   refuseReservation: (id: string, note?: string) => Promise<void>
+  finalizeReservation: (id: string, km?: number) => Promise<void>
   addVehicle: (data: VehicleFormData) => Promise<void>
+  updateVehicle: (id: string, data: VehicleFormData) => Promise<void>
   updateVehicleStatus: (id: string, status: Vehicle['status']) => Promise<void>
   deleteVehicle: (id: string) => Promise<void>
   toggleUserActive: (id: string) => Promise<void>
-  addUser: (user: Omit<User, 'id'>) => Promise<void>
+  addUser: (user: Omit<User, 'id'> & { password?: string }) => Promise<void>
+  updateUser: (id: string, data: { name: string; email: string; sector: string; role: string; initials: string; active: boolean }) => Promise<void>
+  deleteUser: (id: string) => Promise<void>
 
   // Toast
   toast: Toast | null
@@ -70,21 +74,25 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
   })
 
-  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
+  }, [isDark])
 
   const toggleDark = useCallback(() => {
     setIsDark(prev => {
       const next = !prev
       localStorage.setItem('dc-theme', next ? 'dark' : 'light')
-      document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light')
       return next
     })
   }, [])
 
+  const toastTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+
   // ─── Toast ──────────────────────────────────────────────────────────────────
   const showToast = useCallback((message: string, type: Toast['type'] = 'success') => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current)
     setToast({ message, type })
-    setTimeout(() => setToast(null), 3500)
+    toastTimeoutRef.current = setTimeout(() => setToast(null), 3500)
   }, [])
 
   // ─── Carregar dados após login ───────────────────────────────────────────────
@@ -114,17 +122,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const savedToken = token.get()
     if (!savedToken) return
+    let cancelled = false
 
     authService.me()
       .then(user => {
+        if (cancelled) return
         setCurrentUser(user as User)
         setIsAuthenticated(true)
         setCurrentPage(user.role === 'admin' ? 'admin-dashboard' : 'dashboard')
         loadData(user.role)
       })
       .catch(() => {
+        if (cancelled) return
         token.clear()
       })
+
+    return () => { cancelled = true }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ─── Auth ────────────────────────────────────────────────────────────────────
@@ -132,9 +145,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       const user = await authService.login(username, password)
       setCurrentUser(user as User)
-      setIsAuthenticated(true)
       setCurrentPage(user.role === 'admin' ? 'admin-dashboard' : 'dashboard')
       await loadData(user.role)
+      setIsAuthenticated(true)
       return true
     } catch (err: any) {
       // Erros de credencial retornam false (a LoginPage mostra a mensagem)
@@ -197,6 +210,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [showToast])
 
+  const finalizeReservation = useCallback(async (id: string, km?: number) => {
+    try {
+      const atualizada = await reservaService.finalize(id, km)
+      setReservations(prev => prev.map(r => r.id === id ? atualizada : r))
+      showToast('Reserva finalizada com sucesso!')
+    } catch (err: any) {
+      showToast(err.message || 'Erro ao finalizar reserva.', 'error')
+    }
+  }, [showToast])
+
   const addVehicle = useCallback(async (data: VehicleFormData) => {
     try {
       const novo = await veiculoService.create(data)
@@ -228,6 +251,38 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [showToast])
 
+  const updateVehicle = useCallback(async (id: string, data: VehicleFormData) => {
+    try {
+      const atualizado = await veiculoService.update(id, data)
+      setVehicles(prev => prev.map(v => v.id === id ? atualizado : v))
+      showToast(`Veículo ${atualizado.plate} atualizado!`)
+    } catch (err: any) {
+      showToast(err.message || 'Erro ao atualizar veículo.', 'error')
+      throw err
+    }
+  }, [showToast])
+
+  const deleteUser = useCallback(async (id: string) => {
+    try {
+      await usuarioService.delete(id)
+      setUsers(prev => prev.filter(u => u.id !== id))
+      showToast('Usuário removido.', 'info')
+    } catch (err: any) {
+      showToast(err.message || 'Erro ao remover usuário.', 'error')
+    }
+  }, [showToast])
+
+  const updateUser = useCallback(async (id: string, form: { name: string; email: string; sector: string; role: string; initials: string; active: boolean }) => {
+    try {
+      const atualizado = await usuarioService.update(id, form)
+      setUsers(prev => prev.map(u => u.id === id ? atualizado : u))
+      showToast(`Usuário ${atualizado.name} atualizado!`)
+    } catch (err: any) {
+      showToast(err.message || 'Erro ao atualizar usuário.', 'error')
+      throw err
+    }
+  }, [showToast])
+
   const toggleUserActive = useCallback(async (id: string) => {
     try {
       const { active } = await usuarioService.toggleAtivo(id)
@@ -238,11 +293,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [showToast])
 
-  const addUser = useCallback(async (userData: Omit<User, 'id'>) => {
+  const addUser = useCallback(async (userData: Omit<User, 'id'> & { password?: string }) => {
     try {
       const novo = await usuarioService.create(userData as any)
       setUsers(prev => [...prev, novo as User])
-      showToast(`Usuário ${novo.name} cadastrado! Senha padrão: 12345678`)
+      showToast(`Usuário ${novo.name} cadastrado com sucesso!`)
     } catch (err: any) {
       showToast(err.message || 'Erro ao cadastrar usuário.', 'error')
       throw err
@@ -255,9 +310,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       currentPage, navigate,
       vehicles, reservations, users, loading,
       addReservation, cancelReservation,
-      approveReservation, refuseReservation,
-      addVehicle, updateVehicleStatus, deleteVehicle,
-      toggleUserActive, addUser,
+      approveReservation, refuseReservation, finalizeReservation,
+      addVehicle, updateVehicle, updateVehicleStatus, deleteVehicle,
+      toggleUserActive, addUser, updateUser, deleteUser,
       toast, showToast, isDark, toggleDark,
     }}>
       {children}

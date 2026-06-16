@@ -43,7 +43,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         </button>
 
         <div className="user-chip">
-          <Avatar initials={currentUser?.initials} avatarUrl={currentUser?.avatarUrl} isAdmin={isAdmin} />
+          <Avatar initials={currentUser?.initials ?? ''} avatarUrl={currentUser?.avatarUrl} isAdmin={isAdmin} />
           <div>
             <div style={{ fontWeight: 500, lineHeight: 1.2 }}>{currentUser?.name}</div>
             <div style={{ fontSize: 11, color: 'var(--color-text-tertiary)', lineHeight: 1.2 }}>

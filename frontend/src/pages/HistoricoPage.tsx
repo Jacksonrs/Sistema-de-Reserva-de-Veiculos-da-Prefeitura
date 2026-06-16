@@ -17,6 +17,7 @@ export default function HistoricoPage() {
   const completed = myReservations.filter(r => r.status === 'finalizada')
   const pending   = myReservations.filter(r => r.status === 'pendente')
   const totalKm   = completed.reduce((sum, r) => sum + (r.km ?? 0), 0)
+  const currentMonth = new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
 
   const vehicleCount: Record<string, number> = {}
   completed.forEach(r => {
@@ -33,8 +34,8 @@ export default function HistoricoPage() {
     recusada:   'var(--color-red)',
   }
 
-  function handleCancel(id: string) {
-    cancelReservation(id)
+  async function handleCancel(id: string) {
+    await cancelReservation(id)
     setConfirmCancel(null)
   }
 
@@ -57,7 +58,7 @@ export default function HistoricoPage() {
         <div className="stat-card">
           <div className="stat-label">KM total rodados</div>
           <div className="stat-value">{totalKm.toLocaleString('pt-BR', { minimumFractionDigits: 1 })}</div>
-          <div className="stat-meta">km em maio/2026</div>
+          <div className="stat-meta">km em {currentMonth}</div>
         </div>
         <div className="stat-card">
           <div className="stat-label">Veículo mais usado</div>

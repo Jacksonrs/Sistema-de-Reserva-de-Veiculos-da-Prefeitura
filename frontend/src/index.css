@@ -279,25 +279,10 @@ button, input, select, textarea {
 
 .btn-sm.btn-red:hover { background: #f5d5d5; }
 
-.btn-primary {
-  width: 100%;
-  padding: 10px;
-  background: var(--color-accent);
-  color: #fff;
-  border: none;
-  border-radius: var(--border-radius-md);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background .15s;
-}
-
-.btn-primary:hover { background: var(--color-accent-hover); }
-
 /* ─── Stat cards ─────────────────────────────────────────────────────────── */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(var(--cols, 4), 1fr);
   gap: 12px;
   margin-bottom: 1.5rem;
 }
@@ -519,13 +504,6 @@ button, input, select, textarea {
 .vehicle-footer { display: flex; align-items: center; justify-content: space-between; margin-top: .4rem; }
 
 /* ─── History timeline ───────────────────────────────────────────────────── */
-.history-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 1.5rem;
-}
-
 .timeline-item {
   display: flex;
   gap: 12px;
@@ -633,17 +611,6 @@ button, input, select, textarea {
   font-size: 13px;
   color: var(--color-text-secondary);
   margin-bottom: 2rem;
-}
-
-.field {
-  margin-bottom: 1rem;
-}
-
-.field label {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  margin-bottom: 6px;
 }
 
 .field-input-wrap {
@@ -997,6 +964,8 @@ button, input, select, textarea {
   align-items: center;
   padding: 4px;
 }
+
+.password-toggle:hover { color: var(--color-text-primary); }
 
 .password-toggle:hover { color: var(--color-text-primary); }
 

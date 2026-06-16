@@ -31,9 +31,8 @@ export default function VeiculosPage() {
     { key: 'todos',      label: `Todos (${counts.todos})` },
     { key: 'disponivel', label: `Disponíveis (${counts.disponivel})` },
     { key: 'em-uso',     label: `Em uso (${counts['em-uso']})` },
+    { key: 'manutencao', label: `Manutenção (${counts.manutencao})` },
   ]
-  if (counts.manutencao > 0)
-    filterOptions.push({ key: 'manutencao', label: `Manutenção (${counts.manutencao})` })
 
   return (
     <>

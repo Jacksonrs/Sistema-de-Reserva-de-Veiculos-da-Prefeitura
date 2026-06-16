@@ -1,20 +1,13 @@
 import { useApp } from '@/context/AppContext'
 import Badge from '@/components/Badge'
 import Skeleton from '@/components/Skeleton'
-import { useState, useEffect } from 'react'
 import {
   vehicleStatusBadge, reservationStatusBadge, reservationStatusLabel,
   formatDateShort,
 } from '@/utils/formatters'
 
 export default function DashboardPage() {
-  const { vehicles, reservations, navigate } = useApp()
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 1000)
-    return () => clearTimeout(t)
-  }, [])
+  const { vehicles, reservations, navigate, loading } = useApp()
 
   const disponivel = vehicles.filter(v => v.status === 'disponivel').length
   const emUso = vehicles.filter(v => v.status === 'em-uso').length

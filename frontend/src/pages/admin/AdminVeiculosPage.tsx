@@ -6,19 +6,29 @@ import { vehicleStatusBadge, vehicleStatusLabel, formatKm } from '@/utils/format
 
 const EMPTY_FORM: VehicleFormData = {
   plate: '', model: '', brand: '', year: String(new Date().getFullYear()),
-  fuel: 'Flex', km: '0', capacity: '5', type: 'Carro', status: 'disponivel',
+  fuel: 'Flex', km: '0', capacity: '5', vehicleType: 'Carro', status: 'disponivel',
 }
 
 export default function AdminVeiculosPage() {
-  const { vehicles, addVehicle, updateVehicleStatus, deleteVehicle } = useApp()
+  const { vehicles, addVehicle, updateVehicle, updateVehicleStatus, deleteVehicle } = useApp()
   const [form, setForm] = useState<VehicleFormData>(EMPTY_FORM)
   const [errors, setErrors] = useState<Partial<Record<keyof VehicleFormData, string>>>({})
   const [showForm, setShowForm] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editForm, setEditForm] = useState<VehicleFormData | null>(null)
+  const [editErrors, setEditErrors] = useState<Partial<Record<keyof VehicleFormData, string>>>({})
+  const [submitting, setSubmitting] = useState(false)
+  const [editSubmitting, setEditSubmitting] = useState(false)
 
   function update(field: keyof VehicleFormData, value: string) {
     setForm(f => ({ ...f, [field]: value }))
     setErrors(e => ({ ...e, [field]: undefined }))
+  }
+
+  function updateEdit(field: keyof VehicleFormData, value: string) {
+    setEditForm(f => f ? { ...f, [field]: value } : null)
+    setEditErrors(e => ({ ...e, [field]: undefined }))
   }
 
   function validate() {
@@ -31,12 +41,56 @@ export default function AdminVeiculosPage() {
     return Object.keys(next).length === 0
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function validateEdit() {
+    if (!editForm) return false
+    const next: typeof editErrors = {}
+    if (!editForm.plate.trim()) next.plate = 'Informe a placa.'
+    if (!editForm.model.trim()) next.model = 'Informe o modelo.'
+    if (!editForm.brand.trim()) next.brand = 'Informe a marca.'
+    if (!editForm.year || isNaN(Number(editForm.year))) next.year = 'Ano inválido.'
+    setEditErrors(next)
+    return Object.keys(next).length === 0
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!validate()) return
-    addVehicle(form)
-    setForm(EMPTY_FORM)
-    setShowForm(false)
+    setSubmitting(true)
+    try {
+      await addVehicle(form)
+      setForm(EMPTY_FORM)
+      setShowForm(false)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  async function handleEditSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!editForm || !editingId || !validateEdit()) return
+    setEditSubmitting(true)
+    try {
+      await updateVehicle(editingId, editForm)
+      setEditingId(null)
+      setEditForm(null)
+    } finally {
+      setEditSubmitting(false)
+    }
+  }
+
+  function startEdit(v: Vehicle) {
+    setEditingId(v.id)
+    setEditForm({
+      plate: v.plate,
+      model: v.model,
+      brand: v.brand,
+      year: String(v.year),
+      fuel: v.fuel,
+      km: String(v.km),
+      capacity: String(v.capacity),
+      vehicleType: v.vehicleType,
+      status: v.status,
+    })
   }
 
   const statusOptions: VehicleStatus[] = ['disponivel', 'em-uso', 'manutencao']
@@ -78,7 +132,7 @@ export default function AdminVeiculosPage() {
               </div>
               <div className="form-group">
                 <label className="form-label">Tipo</label>
-                <select className="form-select" value={form.type} onChange={e => update('type', e.target.value)}>
+                <select className="form-select" value={form.vehicleType} onChange={e => update('vehicleType', e.target.value)}>
                   {['Carro','Caminhonete','Van','Ônibus','SUV','Minivan'].map(t => <option key={t}>{t}</option>)}
                 </select>
               </div>
@@ -104,12 +158,71 @@ export default function AdminVeiculosPage() {
               </div>
             </div>
             <div style={{ marginTop: '1rem', display: 'flex', gap: 8 }}>
-              <button className="btn-sm btn-blue" type="submit">
-                <i className="ti ti-device-floppy" /> Cadastrar veículo
+              <button className="btn-sm btn-blue" type="submit" disabled={submitting}>
+                {submitting ? 'Cadastrando…' : <><i className="ti ti-device-floppy" /> Cadastrar veículo</>}
               </button>
               <button className="btn-sm" type="button" onClick={() => setShowForm(false)}>Cancelar</button>
             </div>
           </form>
+        </div>
+      )}
+
+      {/* ── Edit Modal ────────────────────────────────────────────────── */}
+      {editingId && editForm && (
+        <div className="modal-overlay" onClick={() => { setEditingId(null); setEditForm(null) }}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <div className="modal-title">Editar veículo — {editForm.plate}</div>
+            <form onSubmit={handleEditSubmit}>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label className="form-label">Placa *</label>
+                  <input className="form-input" placeholder="CLR-3344" value={editForm.plate} onChange={e => updateEdit('plate', e.target.value)} />
+                  {editErrors.plate && <span style={{ fontSize: 11, color: 'var(--color-red)' }}>{editErrors.plate}</span>}
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Modelo *</label>
+                  <input className="form-input" placeholder="Hilux" value={editForm.model} onChange={e => updateEdit('model', e.target.value)} />
+                  {editErrors.model && <span style={{ fontSize: 11, color: 'var(--color-red)' }}>{editErrors.model}</span>}
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Marca *</label>
+                  <input className="form-input" placeholder="Toyota" value={editForm.brand} onChange={e => updateEdit('brand', e.target.value)} />
+                  {editErrors.brand && <span style={{ fontSize: 11, color: 'var(--color-red)' }}>{editErrors.brand}</span>}
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Ano *</label>
+                  <input className="form-input" type="number" placeholder="2022" value={editForm.year} onChange={e => updateEdit('year', e.target.value)} />
+                  {editErrors.year && <span style={{ fontSize: 11, color: 'var(--color-red)' }}>{editErrors.year}</span>}
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Tipo</label>
+                  <select className="form-select" value={editForm.vehicleType} onChange={e => updateEdit('vehicleType', e.target.value)}>
+                    {['Carro','Caminhonete','Van','Ônibus','SUV','Minivan'].map(t => <option key={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Combustível</label>
+                  <select className="form-select" value={editForm.fuel} onChange={e => updateEdit('fuel', e.target.value)}>
+                    {['Flex','Gasolina','Diesel','Elétrico','Diesel 4×4'].map(f => <option key={f}>{f}</option>)}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">KM atual</label>
+                  <input className="form-input" type="number" placeholder="0" value={editForm.km} onChange={e => updateEdit('km', e.target.value)} />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Capacidade (lugares)</label>
+                  <input className="form-input" type="number" placeholder="5" value={editForm.capacity} onChange={e => updateEdit('capacity', e.target.value)} />
+                </div>
+              </div>
+              <div style={{ marginTop: '1rem', display: 'flex', gap: 8 }}>
+                <button className="btn-sm btn-blue" type="submit" disabled={editSubmitting}>
+                  {editSubmitting ? 'Salvando…' : <><i className="ti ti-device-floppy" /> Salvar</>}
+                </button>
+                <button className="btn-sm" type="button" onClick={() => { setEditingId(null); setEditForm(null) }}>Cancelar</button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 
@@ -119,8 +232,7 @@ export default function AdminVeiculosPage() {
           <thead>
             <tr>
               <th style={{ width: 90 }}>Placa</th>
-              <th>Modelo</th>
-              <th style={{ width: 80 }}>Marca</th>
+              <th>Modelo / Marca</th>
               <th style={{ width: 55 }}>Ano</th>
               <th style={{ width: 80 }}>Tipo</th>
               <th style={{ width: 55 }}>Cap.</th>
@@ -134,9 +246,8 @@ export default function AdminVeiculosPage() {
               <tr key={v.id}>
                 <td><strong className="mono">{v.plate}</strong></td>
                 <td>{v.brand} {v.model}</td>
-                <td>{v.brand}</td>
                 <td>{v.year}</td>
-                <td>{v.type}</td>
+                <td>{v.vehicleType}</td>
                 <td>{v.capacity}</td>
                 <td>{formatKm(v.km)}</td>
                 <td>
@@ -150,23 +261,29 @@ export default function AdminVeiculosPage() {
                   </select>
                 </td>
                 <td>
-                  {confirmDelete === v.id ? (
-                    <div style={{ display: 'flex', gap: 4 }}>
-                      <button className="btn-sm btn-red" style={{ fontSize: 11, padding: '2px 8px' }}
-                        onClick={() => { deleteVehicle(v.id); setConfirmDelete(null) }}>
-                        Sim
-                      </button>
-                      <button className="btn-sm" style={{ fontSize: 11, padding: '2px 8px' }}
-                        onClick={() => setConfirmDelete(null)}>
-                        Não
-                      </button>
-                    </div>
-                  ) : (
-                    <button className="btn-sm btn-red" style={{ fontSize: 11, padding: '3px 10px' }}
-                      onClick={() => setConfirmDelete(v.id)}>
-                      <i className="ti ti-trash" />
+                  <div style={{ display: 'flex', gap: 4 }}>
+                    <button className="btn-sm" style={{ fontSize: 11, padding: '3px 10px' }}
+                      onClick={() => startEdit(v)}>
+                      <i className="ti ti-edit" />
                     </button>
-                  )}
+                    {confirmDelete === v.id ? (
+                      <div style={{ display: 'flex', gap: 4 }}>
+                        <button className="btn-sm btn-red" style={{ fontSize: 11, padding: '2px 8px' }}
+                          onClick={() => { deleteVehicle(v.id); setConfirmDelete(null) }}>
+                          Sim
+                        </button>
+                        <button className="btn-sm" style={{ fontSize: 11, padding: '2px 8px' }}
+                          onClick={() => setConfirmDelete(null)}>
+                          Não
+                        </button>
+                      </div>
+                    ) : (
+                      <button className="btn-sm btn-red" style={{ fontSize: 11, padding: '3px 10px' }}
+                        onClick={() => setConfirmDelete(v.id)}>
+                        <i className="ti ti-trash" />
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}

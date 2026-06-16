@@ -20,6 +20,7 @@ export default function AgendarPage() {
     destination:   '',
   })
   const [errors, setErrors] = useState<Partial<Record<keyof ReservationFormData, string>>>({})
+  const [submitting, setSubmitting] = useState(false)
 
   function selectVehicle(v: Vehicle) {
     setSelectedVehicle(v)
@@ -44,11 +45,16 @@ export default function AgendarPage() {
     return Object.keys(next).length === 0
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!validate()) return
-    addReservation(form)
-    setTimeout(() => navigate('historico'), 1600)
+    setSubmitting(true)
+    try {
+      await addReservation(form)
+      setTimeout(() => navigate('historico'), 600)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -113,9 +119,8 @@ export default function AgendarPage() {
         </div>
 
         <div style={{ marginTop: '1.25rem', display: 'flex', gap: '.75rem' }}>
-          <button className="btn-sm btn-blue" type="submit">
-            <i className="ti ti-send" aria-hidden="true" />
-            Enviar solicitação
+          <button className="btn-sm btn-blue" type="submit" disabled={submitting}>
+            {submitting ? 'Enviando…' : <><i className="ti ti-send" aria-hidden="true" /> Enviar solicitação</>}
           </button>
           <button className="btn-sm" type="button" onClick={() => navigate('dashboard')}>Cancelar</button>
         </div>

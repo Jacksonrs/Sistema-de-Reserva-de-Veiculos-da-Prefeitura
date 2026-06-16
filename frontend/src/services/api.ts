@@ -1,5 +1,5 @@
 // ─── Configuração base ────────────────────────────────────────────────────────
-const BASE_URL = 'http://localhost:8000/api'
+const BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
 // ─── Helpers de token ─────────────────────────────────────────────────────────
 export const token = {
@@ -83,7 +83,7 @@ function mapVeiculo(v: any) {
     fuel:                   v.fuel,
     km:                     v.km,
     capacity:               v.capacity,
-    type:                   v.type,
+    vehicleType:            v.vehicle_type,
     status:                 v.status,
     currentDriver:          v.current_driver ?? undefined,
     currentDriverInitials:  v.current_driver_initials ?? undefined,
@@ -157,7 +157,7 @@ export const veiculoService = {
 
   async create(form: {
     plate: string; model: string; brand: string; year: string
-    fuel: string; km: string; capacity: string; type: string; status: string
+    fuel: string; km: string; capacity: string; vehicleType: string; status: string
   }) {
     const payload = {
       plate:    form.plate.toUpperCase(),
@@ -167,7 +167,7 @@ export const veiculoService = {
       fuel:     form.fuel,
       km:       Number(form.km),
       capacity: Number(form.capacity),
-      type:     form.type,
+      vehicle_type: form.vehicleType,
       status:   form.status,
     }
     const data = await http.post<any>('/veiculos/', payload)
@@ -184,6 +184,25 @@ export const veiculoService = {
       payload.departure_time = null
     }
     const data = await http.patch<any>(`/veiculos/${id}/status/`, payload)
+    return mapVeiculo(data)
+  },
+
+  async update(id: string, form: {
+    plate: string; model: string; brand: string; year: string
+    fuel: string; km: string; capacity: string; vehicleType: string; status: string
+  }) {
+    const payload = {
+      plate:    form.plate.toUpperCase(),
+      model:    form.model,
+      brand:    form.brand,
+      year:     Number(form.year),
+      fuel:     form.fuel,
+      km:       Number(form.km),
+      capacity: Number(form.capacity),
+      vehicle_type: form.vehicleType,
+      status:   form.status,
+    }
+    const data = await http.patch<any>(`/veiculos/${id}/`, payload)
     return mapVeiculo(data)
   },
 
@@ -234,10 +253,13 @@ export const reservaService = {
     return mapReserva(data)
   },
 
-  async stats() {
-    return http.get<any>('/reservas/stats/')
-  },
-}
+  async finalize(id: string, km?: number) {
+    const data = await http.patch<any>(`/reservas/${id}/acao/`, {
+      action: 'finalizar',
+      km: km ?? 0,
+    })
+    return mapReserva(data)
+  },}
 
 // ─── Serviços de Usuários ─────────────────────────────────────────────────────
 export const usuarioService = {
@@ -249,6 +271,7 @@ export const usuarioService = {
   async create(user: {
     name: string; email: string; sector: string
     role: string; initials: string; active: boolean
+    password?: string
   }) {
     // Gera username a partir do primeiro nome (sem acentos, minúsculas)
     const username = user.name
@@ -265,10 +288,22 @@ export const usuarioService = {
       role:     user.role,
       initials: user.initials,
       active:   user.active,
-      password: '12345678', // senha padrão — usuário deve alterar depois
+      password: user.password || '12345678',
     }
     const data = await http.post<any>('/usuarios/', payload)
     return mapUsuario(data)
+  },
+
+  async update(id: string, form: {
+    name: string; email: string; sector: string
+    role: string; initials: string; active: boolean
+  }) {
+    const data = await http.patch<any>(`/usuarios/${id}/`, form)
+    return mapUsuario(data)
+  },
+
+  async delete(id: string) {
+    await http.delete(`/usuarios/${id}/`)
   },
 
   async toggleAtivo(id: string) {

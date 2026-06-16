@@ -4,6 +4,7 @@ export type UserRole = 'admin' | 'usuario'
 // ─── User ─────────────────────────────────────────────────────────────────────
 export interface User {
   id: string
+  username: string
   name: string
   initials: string
   role: UserRole
@@ -25,7 +26,7 @@ export interface Vehicle {
   fuel: string
   km: number
   capacity: number
-  type: string
+  vehicleType: string
   status: VehicleStatus
   currentDriver?: string
   currentDriverInitials?: string
@@ -77,6 +78,6 @@ export interface VehicleFormData {
   fuel: string
   km: string
   capacity: string
-  type: string
+  vehicleType: string
   status: VehicleStatus
 }
