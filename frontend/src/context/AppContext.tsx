@@ -44,7 +44,7 @@ interface AppContextValue {
   updateVehicleStatus: (id: string, status: Vehicle['status']) => Promise<void>
   deleteVehicle: (id: string) => Promise<void>
   toggleUserActive: (id: string) => Promise<void>
-  addUser: (user: Omit<User, 'id'> & { password?: string }) => Promise<void>
+  addUser: (user: Omit<User, 'id' | 'username'> & { password?: string }) => Promise<void>
   updateUser: (id: string, data: { name: string; email: string; sector: string; role: string; initials: string; active: boolean }) => Promise<void>
   deleteUser: (id: string) => Promise<void>
 
@@ -304,7 +304,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [showToast])
 
-  const addUser = useCallback(async (userData: Omit<User, 'id'> & { password?: string }) => {
+  const addUser = useCallback(async (userData: Omit<User, 'id' | 'username'> & { password?: string }) => {
     try {
       const novo = await usuarioService.create(userData as any)
       setUsers(prev => [...prev, novo as User])

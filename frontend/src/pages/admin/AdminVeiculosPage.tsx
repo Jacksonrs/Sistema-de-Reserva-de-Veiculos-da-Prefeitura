@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useApp } from '@/context/AppContext'
 import Badge from '@/components/Badge'
-import type { VehicleFormData, VehicleStatus } from '@/types'
+import type { Vehicle, VehicleFormData, VehicleStatus } from '@/types'
 import { vehicleStatusBadge, vehicleStatusLabel, formatKm } from '@/utils/formatters'
 
 const EMPTY_FORM: VehicleFormData = {
