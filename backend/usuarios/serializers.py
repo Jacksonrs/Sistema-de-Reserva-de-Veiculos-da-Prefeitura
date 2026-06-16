@@ -50,7 +50,7 @@ class UsuarioCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Usuario
         fields = [
-            'username', 'name', 'initials', 'email',
+            'id', 'username', 'name', 'initials', 'email',
             'role', 'sector', 'active', 'avatar', 'password',
         ]
 
