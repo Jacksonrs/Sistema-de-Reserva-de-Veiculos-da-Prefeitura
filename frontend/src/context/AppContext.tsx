@@ -38,6 +38,7 @@ interface AppContextValue {
   approveReservation: (id: string) => Promise<void>
   refuseReservation: (id: string, note?: string) => Promise<void>
   finalizeReservation: (id: string, km?: number) => Promise<void>
+  finalizeByDriver: (id: string, km?: number) => Promise<void>
   addVehicle: (data: VehicleFormData) => Promise<void>
   updateVehicle: (id: string, data: VehicleFormData) => Promise<void>
   updateVehicleStatus: (id: string, status: Vehicle['status']) => Promise<void>
@@ -179,6 +180,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, [showToast])
 
+  const finalizeByDriver = useCallback(async (id: string, km?: number) => {
+    try {
+      const atualizada = await reservaService.finalizeByDriver(id, km)
+      setReservations(prev => prev.map(r => r.id === id ? atualizada : r))
+      showToast('Reserva finalizada com sucesso!')
+    } catch (err: any) {
+      showToast(err.message || 'Erro ao finalizar reserva.', 'error')
+    }
+  }, [showToast])
+
   const cancelReservation = useCallback(async (id: string) => {
     try {
       const atualizada = await reservaService.cancel(id)
@@ -310,7 +321,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       currentPage, navigate,
       vehicles, reservations, users, loading,
       addReservation, cancelReservation,
-      approveReservation, refuseReservation, finalizeReservation,
+      approveReservation, refuseReservation, finalizeReservation, finalizeByDriver,
       addVehicle, updateVehicle, updateVehicleStatus, deleteVehicle,
       toggleUserActive, addUser, updateUser, deleteUser,
       toast, showToast, isDark, toggleDark,

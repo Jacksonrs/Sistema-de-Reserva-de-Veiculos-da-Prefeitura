@@ -259,6 +259,13 @@ export const reservaService = {
       km: km ?? 0,
     })
     return mapReserva(data)
+  },
+
+  async finalizeByDriver(id: string, km?: number) {
+    const data = await http.patch<any>(`/reservas/${id}/finalizar/`, {
+      km: km ?? 0,
+    })
+    return mapReserva(data)
   },}
 
 // ─── Serviços de Usuários ─────────────────────────────────────────────────────

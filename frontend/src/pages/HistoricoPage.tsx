@@ -4,8 +4,10 @@ import Badge from '@/components/Badge'
 import { reservationStatusBadge, reservationStatusLabel, formatDate, formatKmDecimal } from '@/utils/formatters'
 
 export default function HistoricoPage() {
-  const { reservations, cancelReservation, currentUser } = useApp()
+  const { reservations, cancelReservation, finalizeByDriver, currentUser } = useApp()
   const [confirmCancel, setConfirmCancel] = useState<string | null>(null)
+  const [finalizeId, setFinalizeId] = useState<string | null>(null)
+  const [finalizeKm, setFinalizeKm] = useState('')
 
   // Show only current user's reservations
   const myReservations = useMemo(() =>
@@ -39,8 +41,38 @@ export default function HistoricoPage() {
     setConfirmCancel(null)
   }
 
+  async function confirmFinalize() {
+    if (!finalizeId) return
+    await finalizeByDriver(finalizeId, finalizeKm ? Number(finalizeKm) : undefined)
+    setFinalizeId(null)
+    setFinalizeKm('')
+  }
+
   return (
     <>
+      {/* ── Finalize modal ────────────────────────────────────────────── */}
+      {finalizeId && (
+        <div className="modal-overlay" onClick={() => setFinalizeId(null)}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <div className="modal-title">Finalizar corrida</div>
+            <div className="modal-sub">Informe a quilometragem final (opcional).</div>
+            <input
+              className="form-input"
+              type="number" step="0.1" placeholder="KM final"
+              style={{ marginBottom: '1rem' }}
+              value={finalizeKm}
+              onChange={e => setFinalizeKm(e.target.value)}
+            />
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button className="btn-sm btn-green" onClick={confirmFinalize}>
+                Confirmar finalização
+              </button>
+              <button className="btn-sm" onClick={() => setFinalizeId(null)}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── KPI strip ─────────────────────────────────────────────────── */}
       <div className="history-grid">
         <div className="stat-card">
@@ -115,6 +147,14 @@ export default function HistoricoPage() {
                     <i className="ti ti-x" style={{ fontSize: 12 }} /> Cancelar solicitação
                   </button>
                 )}
+              </div>
+            )}
+            {r.status === 'em-uso' && (
+              <div style={{ marginTop: '.5rem' }}>
+                <button className="btn-sm btn-blue" style={{ fontSize: 11, padding: '3px 10px' }}
+                  onClick={() => { setFinalizeId(r.id); setFinalizeKm('') }}>
+                  <i className="ti ti-checkbox" /> Finalizar corrida
+                </button>
               </div>
             )}
           </div>
