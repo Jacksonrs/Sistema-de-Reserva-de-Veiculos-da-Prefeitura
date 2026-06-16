@@ -4,7 +4,10 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Reserva
-from .serializers import ReservaSerializer, ReservaCreateSerializer, ReservaAdminActionSerializer
+from .serializers import (
+    ReservaSerializer, ReservaCreateSerializer,
+    ReservaFinalizarSerializer, ReservaAdminActionSerializer,
+)
 from usuarios.permissions import IsAdmin
 
 
@@ -98,6 +101,52 @@ class CancelarReservaView(APIView):
         veiculo.departure_time = None
         veiculo.save()
 
+        return Response(ReservaSerializer(reserva).data)
+
+
+# ─── Finalizar (motorista da reserva ou admin) ───────────────────────────────
+class FinalizarReservaView(APIView):
+    """
+    PATCH /api/reservas/<id>/finalizar/
+    Body: { "km": 42500.0 }
+
+    Permite que o motorista da reserva (ou admin) finalize a própria corrida.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk):
+        try:
+            reserva = Reserva.objects.get(pk=pk)
+        except Reserva.DoesNotExist:
+            return Response({'detail': 'Reserva não encontrada.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Admin ou o próprio motorista
+        if request.user.role != 'admin' and reserva.driver != request.user:
+            return Response({'detail': 'Sem permissão.'}, status=status.HTTP_403_FORBIDDEN)
+
+        if reserva.status not in ('reservado', 'em-uso'):
+            return Response(
+                {'detail': 'Apenas reservas em andamento podem ser finalizadas.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        serializer = ReservaFinalizarSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        km = serializer.validated_data.get('km')
+
+        reserva.status = 'finalizada'
+        if km is not None:
+            reserva.km = km
+
+        veiculo = reserva.veiculo
+        veiculo.status = 'disponivel'
+        veiculo.current_driver = None
+        veiculo.current_driver_initials = None
+        veiculo.current_destination = None
+        veiculo.departure_time = None
+
+        reserva.save()
+        veiculo.save()
         return Response(ReservaSerializer(reserva).data)
 
 

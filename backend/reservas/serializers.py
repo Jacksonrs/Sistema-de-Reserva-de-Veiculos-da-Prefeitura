@@ -75,6 +75,11 @@ class ReservaCreateSerializer(serializers.ModelSerializer):
         return reserva
 
 
+class ReservaFinalizarSerializer(serializers.Serializer):
+    """Finalização da reserva pelo motorista."""
+    km = serializers.DecimalField(max_digits=8, decimal_places=1, required=False)
+
+
 class ReservaAdminActionSerializer(serializers.Serializer):
     """Aprovação / recusa pelo admin."""
     action     = serializers.ChoiceField(choices=['aprovar', 'recusar', 'finalizar'])
