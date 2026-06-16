@@ -16,7 +16,12 @@ export default function HistoricoPage() {
       .sort((a, b) => b.date.localeCompare(a.date))
   , [reservations, currentUser])
 
-  const completed = myReservations.filter(r => r.status === 'finalizada')
+  const completed = myReservations.filter(r => {
+    if (r.status !== 'finalizada') return false
+    const d = new Date(r.date)
+    const now = new Date()
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+  })
   const pending   = myReservations.filter(r => r.status === 'pendente')
   const totalKm   = completed.reduce((sum, r) => sum + (r.km ?? 0), 0)
   const currentMonth = new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })

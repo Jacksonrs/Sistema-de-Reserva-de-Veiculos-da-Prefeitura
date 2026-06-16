@@ -10,9 +10,15 @@ export default function RelatoriosPage() {
   const currentMonth = new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
 
   const stats = useMemo(() => {
-    const completed = reservations.filter(r => r.status === 'finalizada')
+    const now = new Date()
+    const completed = reservations.filter(r => {
+      if (r.status !== 'finalizada') return false
+      const d = new Date(r.date)
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+    })
     const totalKm = completed.reduce((s, r) => s + (r.km ?? 0), 0)
-    const avgKm = completed.length ? totalKm / completed.length : 0
+    const tripsWithKm = completed.filter(r => r.km !== undefined && r.km !== null)
+    const avgKm = tripsWithKm.length ? totalKm / tripsWithKm.length : 0
 
     // By vehicle
     const byVehicle: Record<string, { label: string; trips: number; km: number }> = {}
