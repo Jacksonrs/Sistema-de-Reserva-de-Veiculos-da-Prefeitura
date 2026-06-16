@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import Usuario
 
@@ -15,6 +16,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
+        if not self.user.is_active:
+            raise AuthenticationFailed('Conta desativada. Consulte o administrador.')
         # Inclui dados do usuário na resposta do login
         data['user'] = UsuarioSerializer(self.user).data
         return data
