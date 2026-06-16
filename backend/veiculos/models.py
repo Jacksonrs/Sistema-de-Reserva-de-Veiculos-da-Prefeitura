@@ -16,7 +16,7 @@ class Veiculo(models.Model):
     fuel        = models.CharField('Combustível', max_length=50)
     km          = models.PositiveIntegerField('Quilometragem atual', default=0)
     capacity    = models.PositiveSmallIntegerField('Capacidade (pessoas)')
-    type        = models.CharField('Tipo', max_length=50)
+    vehicle_type = models.CharField('Tipo', max_length=50)
     status      = models.CharField('Status', max_length=15, choices=STATUS_CHOICES, default='disponivel')
 
     # Campos de uso ativo — preenchidos quando status='em-uso'

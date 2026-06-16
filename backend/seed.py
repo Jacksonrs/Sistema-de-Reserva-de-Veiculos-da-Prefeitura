@@ -43,23 +43,23 @@ for u in USUARIOS:
 print("\nCriando veículos...")
 
 VEICULOS = [
-    dict(plate='CLR-3344', model='Hilux',   brand='Toyota',    year=2022, fuel='Diesel 4x4', km=32450,  capacity=5, type='Caminhonete', status='disponivel'),
-    dict(plate='RNL-5591', model='Gol',     brand='VW',        year=2019, fuel='Flex',       km=61890,  capacity=5, type='Carro',       status='disponivel'),
-    dict(plate='ZXC-1100', model='Strada',  brand='Fiat',      year=2021, fuel='Flex',       km=18220,  capacity=2, type='Caminhonete', status='disponivel'),
-    dict(plate='KLD-8823', model='Spin',    brand='Chevrolet', year=2020, fuel='Flex',       km=45100,  capacity=7, type='Minivan',     status='disponivel'),
-    dict(plate='PPT-3310', model='Ka',      brand='Ford',      year=2018, fuel='Flex',       km=88340,  capacity=5, type='Carro',       status='disponivel'),
-    dict(plate='ALV-7721', model='Creta',   brand='Hyundai',   year=2022, fuel='Flex',       km=22100,  capacity=5, type='SUV',         status='disponivel'),
-    dict(plate='FRT-0055', model='Etios',   brand='Toyota',    year=2020, fuel='Flex',       km=54780,  capacity=5, type='Carro',       status='disponivel'),
-    dict(plate='GNT-9982', model='Sandero', brand='Renault',   year=2021, fuel='Flex',       km=71230,  capacity=5, type='Carro',       status='disponivel'),
-    dict(plate='HSP-1023', model='Argo',    brand='Fiat',      year=2021, fuel='Flex',       km=41230,  capacity=5, type='Carro',       status='em-uso',
+    dict(plate='CLR-3344', model='Hilux',   brand='Toyota',    year=2022, fuel='Diesel 4x4', km=32450,  capacity=5, vehicle_type='Caminhonete', status='disponivel'),
+    dict(plate='RNL-5591', model='Gol',     brand='VW',        year=2019, fuel='Flex',       km=61890,  capacity=5, vehicle_type='Carro',       status='disponivel'),
+    dict(plate='ZXC-1100', model='Strada',  brand='Fiat',      year=2021, fuel='Flex',       km=18220,  capacity=2, vehicle_type='Caminhonete', status='disponivel'),
+    dict(plate='KLD-8823', model='Spin',    brand='Chevrolet', year=2020, fuel='Flex',       km=45100,  capacity=7, vehicle_type='Minivan',     status='disponivel'),
+    dict(plate='PPT-3310', model='Ka',      brand='Ford',      year=2018, fuel='Flex',       km=88340,  capacity=5, vehicle_type='Carro',       status='disponivel'),
+    dict(plate='ALV-7721', model='Creta',   brand='Hyundai',   year=2022, fuel='Flex',       km=22100,  capacity=5, vehicle_type='SUV',         status='disponivel'),
+    dict(plate='FRT-0055', model='Etios',   brand='Toyota',    year=2020, fuel='Flex',       km=54780,  capacity=5, vehicle_type='Carro',       status='disponivel'),
+    dict(plate='GNT-9982', model='Sandero', brand='Renault',   year=2021, fuel='Flex',       km=71230,  capacity=5, vehicle_type='Carro',       status='disponivel'),
+    dict(plate='HSP-1023', model='Argo',    brand='Fiat',      year=2021, fuel='Flex',       km=41230,  capacity=5, vehicle_type='Carro',       status='em-uso',
          current_driver='Maria Silva', current_driver_initials='MS', current_destination='Secretaria de Saúde', departure_time='08:15'),
-    dict(plate='PMN-4471', model='S10',     brand='Chevrolet', year=2020, fuel='Diesel',     km=98110,  capacity=5, type='Caminhonete', status='em-uso',
+    dict(plate='PMN-4471', model='S10',     brand='Chevrolet', year=2020, fuel='Diesel',     km=98110,  capacity=5, vehicle_type='Caminhonete', status='em-uso',
          current_driver='Roberto Gomes', current_driver_initials='RG', current_destination='Zona Rural — Assentamento', departure_time='07:40'),
-    dict(plate='TRP-2209', model='Kombi',   brand='VW',        year=2015, fuel='Flex',       km=134900, capacity=9, type='Van',         status='em-uso',
+    dict(plate='TRP-2209', model='Kombi',   brand='VW',        year=2015, fuel='Flex',       km=134900, capacity=9, vehicle_type='Van',         status='em-uso',
          current_driver='Ana Lima', current_driver_initials='AL', current_destination='Escola Mun. João XXIII', departure_time='09:00'),
-    dict(plate='BRT-0834', model='Duster',  brand='Renault',   year=2021, fuel='Flex',       km=67400,  capacity=5, type='SUV',         status='em-uso',
+    dict(plate='BRT-0834', model='Duster',  brand='Renault',   year=2021, fuel='Flex',       km=67400,  capacity=5, vehicle_type='SUV',         status='em-uso',
          current_driver='Felipe Costa', current_driver_initials='FC', current_destination='INSS — reunião', departure_time='09:30'),
-    dict(plate='MPA-6677', model='Ranger',  brand='Ford',      year=2019, fuel='Diesel',     km=55900,  capacity=5, type='Caminhonete', status='manutencao'),
+    dict(plate='MPA-6677', model='Ranger',  brand='Ford',      year=2019, fuel='Diesel',     km=55900,  capacity=5, vehicle_type='Caminhonete', status='manutencao'),
 ]
 
 for v in VEICULOS:
