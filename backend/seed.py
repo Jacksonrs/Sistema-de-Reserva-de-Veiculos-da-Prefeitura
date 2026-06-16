@@ -29,8 +29,9 @@ USUARIOS = [
 ]
 
 for u in USUARIOS:
-    password = u.pop('password')
-    obj, created = Usuario.objects.get_or_create(username=u['username'], defaults=u)
+    password = u['password']
+    data = {k: v for k, v in u.items() if k != 'password'}
+    obj, created = Usuario.objects.get_or_create(username=data['username'], defaults=data)
     if created:
         obj.set_password(password)
         obj.save()
