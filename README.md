@@ -319,31 +319,7 @@ A evolucao do projeto pode ser demonstrada por:
 
 ## Integrantes da equipe
 
-<table align="center">
-  <tr>
-    <td align="center">
-      <a href="https://github.com/Jacksonrs">
-        <img src="https://avatars.githubusercontent.com/u/147336900?v=4" width="100px;" alt="Jackson Renan"/><br>
-        <sub><b>Jackson Renan</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/Ruanpabloband">
-        <img src="https://avatars.githubusercontent.com/u/166414190?v=4" width="100px;" alt="Ruan Pablo"/><br>
-        <sub><b>Ruan Pablo</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/marcelohdev">
-        <img src="https://avatars.githubusercontent.com/u/106102036?v=4" width="100px;" alt="Marcelo Henrique"/><br>
-        <sub><b>Marcelo Henrique</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/andevvs">
-        <img src="https://avatars.githubusercontent.com/u/150745935?v=4" width="100px;" alt="Andrei Vieira"/><br>
-        <sub><b>Andrei Vieira</b></sub>
-      </a>
-    </td>
-  </tr>
-</table>
+| [<img src="https://avatars.githubusercontent.com/u/147336900?v=4" width="110" style="border-radius: 50%;">](https://github.com/Jacksonrs) | [<img src="https://avatars.githubusercontent.com/u/166414190?v=4" width="110" style="border-radius: 50%;">](https://github.com/Ruanpabloband) | [<img src="https://avatars.githubusercontent.com/u/106102036?v=4" width="110" style="border-radius: 50%;">](https://github.com/marcelohdev) | [<img src="https://avatars.githubusercontent.com/u/150745935?v=4" width="110" style="border-radius: 50%;">](https://github.com/andevvs) |
+| :---: | :---: | :---: | :---: |
+| [**Jackson Renan**](https://github.com/Jacksonrs) | [**Ruan Pablo**](https://github.com/Ruanpabloband) | [**Marcelo Henrique**](https://github.com/marcelohdev) | [**Andrei Vieira**](https://github.com/andevvs) |
+| Jackson Renan Oliveira dos Santos<br>`2023011455` | Ruan Pablo Bandeira de Oliveira<br>`2023022946` | Marcelo Henrique Messias Cavalcante<br>`2023011357` | Andrei Vieira e Silva<br>`2023022919` |
