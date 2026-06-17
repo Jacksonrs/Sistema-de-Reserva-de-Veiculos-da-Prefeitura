@@ -10,14 +10,37 @@
   <a href="https://vite.dev/">
     <img src="https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"/>
   </a>
+  <a href="https://www.typescriptlang.org/">
+    <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/>
+  </a>
+  <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">
+    <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3"/>
+  </a>
+  <br>
   <a href="https://www.python.org/">
     <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
   </a>
   <a href="https://www.djangoproject.com/">
     <img src="https://img.shields.io/badge/Django-5.0-092E20?style=for-the-badge&logo=django" alt="Django"/>
   </a>
+  <a href="https://www.django-rest-framework.org/">
+    <img src="https://img.shields.io/badge/Django%20REST-ff1709?style=for-the-badge&logo=django&logoColor=white&color=darkred&labelColor=434343" alt="Django REST Framework"/>
+  </a>
+  <a href="https://jwt.io/">
+    <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white" alt="JWT"/>
+  </a>
   <a href="https://www.sqlite.org/">
     <img src="https://img.shields.io/badge/SQLite-3-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite"/>
+  </a>
+  <br>
+  <a href="https://recharts.org/">
+    <img src="https://img.shields.io/badge/Recharts-22B5BF?style=for-the-badge&logo=Recharts&logoColor=white" alt="Recharts"/>
+  </a>
+  <a href="https://tabler-icons.io/">
+    <img src="https://img.shields.io/badge/Tabler_Icons-0054a6?style=for-the-badge" alt="Tabler Icons"/>
+  </a>
+  <a href="https://git-scm.com/">
+    <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git"/>
   </a>
 </p>
 
